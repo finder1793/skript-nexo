@@ -13,8 +13,8 @@ import org.bukkit.block.Block;
 import org.bukkit.event.Event;
 
 import javax.annotation.Nullable;
-@Name("Is Oraxen Block")
-@Description({"Checks if the block is an Oraxen block."})
+@Name("Is Nexo Block")
+@Description({"Checks if the block is an Nexo block."})
 @Examples({
         "on break:",
         "\tif event-block is a custom block",
@@ -34,7 +34,7 @@ public class CondIsCustomBlock extends Condition {
         }
 
         for (Block b : blocks) {
-            if (OraxenBlocks.isOraxenBlock(b)) {
+            if (NexoBlocks.isNexoBlock(b)) {
                 return true;
             }
         }
@@ -42,7 +42,7 @@ public class CondIsCustomBlock extends Condition {
     }
     @Override
     public String toString(@Nullable Event e, boolean debug) {
-        return block.toString(e, debug) + " is an Oraxen block";
+        return block.toString(e, debug) + " is an Nexo block";
     }
 
     @Override
