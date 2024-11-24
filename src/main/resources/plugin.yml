@@ -4,4 +4,4 @@ description: A Skript Addon that adds useful syntax to be used in conjunction wi
 api-version: 1.13
 version: 1.0
 main: me.asleepp.skriptoraxen.SkriptOraxen
-depend: [Skript, Oraxen]
+depend: [Skript, Nexo]
