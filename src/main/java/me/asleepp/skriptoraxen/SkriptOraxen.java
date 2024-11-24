@@ -44,9 +44,9 @@ public class SkriptOraxen extends JavaPlugin {
             manager.disablePlugin(this);
             return;
         }
-        final Plugin oraxen = manager.getPlugin("Oraxen");
+        final Plugin nexo = manager.getPlugin("Nexo");
         if (oraxen == null || !oraxen.isEnabled()) {
-            getLogger().severe("Could not find Oraxen! Disabling...");
+            getLogger().severe("Could not find Nexo! Disabling...");
             manager.disablePlugin(this);
             return;
         }
