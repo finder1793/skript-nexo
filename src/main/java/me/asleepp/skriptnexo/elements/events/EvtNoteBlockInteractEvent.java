@@ -1,4 +1,4 @@
-package me.asleepp.skriptoraxen.elements.events;
+package me.asleepp.skriptnexo.elements.events;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.doc.Description;
@@ -10,34 +10,32 @@ import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.registrations.EventValues;
 import ch.njol.skript.util.Getter;
-import io.th0rgal.oraxen.api.events.furniture.OraxenFurnitureDamageEvent;
 import io.th0rgal.oraxen.api.events.noteblock.OraxenNoteBlockBreakEvent;
-import io.th0rgal.oraxen.api.events.stringblock.OraxenStringBlockBreakEvent;
-import io.th0rgal.oraxen.api.events.stringblock.OraxenStringBlockPlaceEvent;
+import io.th0rgal.oraxen.api.events.noteblock.OraxenNoteBlockInteractEvent;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
 import javax.annotation.Nullable;
-@Name("On Custom Note Block Break")
-@Description({"Fires when a Oraxen note block gets broken."})
-@Examples({"on break of custom note block:"})
+@Name("On Custom Note Block Interact")
+@Description({"Fires when a Oraxen note block gets interacted with."})
+@Examples({"on interact with custom note block:"})
 @Since("1.0")
-public class EvtNoteBlockBreakEvent extends SkriptEvent {
+public class EvtNoteBlockInteractEvent extends SkriptEvent {
 
     private Literal<String> noteBlockID;
 
     static {
-        Skript.registerEvent("Custom Note Block Break", EvtNoteBlockBreakEvent.class, OraxenNoteBlockBreakEvent.class, "break of (custom|oraxen) (music|note) block [%string%]");
-        EventValues.registerEventValue(OraxenNoteBlockBreakEvent.class, Player.class, new Getter<Player, OraxenNoteBlockBreakEvent>() {
+        Skript.registerEvent("Custom Note Block Interact", EvtNoteBlockInteractEvent.class, OraxenNoteBlockInteractEvent.class, "interact with (custom|oraxen) (music|note) block [%string%]");
+        EventValues.registerEventValue(OraxenNoteBlockInteractEvent.class, Player.class, new Getter<Player, OraxenNoteBlockInteractEvent>() {
             @Override
-            public Player get(OraxenNoteBlockBreakEvent arg) {
+            public Player get(OraxenNoteBlockInteractEvent arg) {
                 return arg.getPlayer();
             }
         }, 0);
-        EventValues.registerEventValue(OraxenNoteBlockBreakEvent.class, Block.class, new Getter<Block, OraxenNoteBlockBreakEvent>() {
+        EventValues.registerEventValue(OraxenNoteBlockInteractEvent.class, Block.class, new Getter<Block, OraxenNoteBlockInteractEvent>() {
             @Override
-            public Block get(OraxenNoteBlockBreakEvent arg) {
+            public Block get(OraxenNoteBlockInteractEvent arg) {
                 return arg.getBlock();
             }
         }, 0);
@@ -51,8 +49,8 @@ public class EvtNoteBlockBreakEvent extends SkriptEvent {
 
     @Override
     public boolean check(Event e) {
-        if (e instanceof OraxenNoteBlockBreakEvent) {
-            OraxenNoteBlockBreakEvent event = (OraxenNoteBlockBreakEvent) e;
+        if (e instanceof OraxenNoteBlockInteractEvent) {
+            OraxenNoteBlockInteractEvent event = (OraxenNoteBlockInteractEvent) e;
             if (noteBlockID == null) {
                 return !event.isCancelled();
             } else {
@@ -65,9 +63,8 @@ public class EvtNoteBlockBreakEvent extends SkriptEvent {
         return false;
     }
 
-
     @Override
     public String toString(@Nullable Event e, boolean debug) {
-        return "custom note block break" + (noteBlockID != null ? noteBlockID.toString(e, debug) : "");
+        return "custom note block interact" + (noteBlockID != null ? noteBlockID.toString(e, debug) : "");
     }
 }

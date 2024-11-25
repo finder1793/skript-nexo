@@ -1,0 +1,17 @@
+[versions]
+paper-api = "1.21-R0.1-SNAPSHOT"
+lombok = "1.18.34"
+shadow = "8.1.8"
+run-paper = "2.3.0"
+skript = "2.7.1"
+nexo = "0.1.0-dev.0"
+
+[libraries]
+paper-api = { module = "io.papermc.paper:paper-api", version.ref = "paper-api" }
+lombok = { group = "org.projectlombok", name = "lombok", version.ref = "lombok" }
+skript = { group = "com.github.SkriptLang", name = "Skript", version.ref = "skript"}
+nexo = { group = "com.nexomc", name = "nexo", version.ref = "nexo"}
+
+[plugins]
+run-paper = { id = "xyz.jpenilla.run-paper", version.ref = "run-paper" }
+shadow = { id = "io.github.goooler.shadow", version.ref = "shadow" }

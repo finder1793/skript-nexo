@@ -1,4 +1,4 @@
-package me.asleepp.skriptoraxen.elements.effects;
+package me.asleepp.skriptnexo.elements.effects;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.doc.Description;
@@ -8,21 +8,21 @@ import ch.njol.skript.lang.Effect;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
-import io.th0rgal.oraxen.api.OraxenBlocks;
+import com.nexomc.nexo.api.NexoBlocks;
 import org.bukkit.Location;
 import org.bukkit.event.Event;
 
 import javax.annotation.Nullable;
-@Name("Set Blocks within")
-@Description({"Set all blocks within 2 locations to Oraxen blocks."})
-@Examples({"set all blocks within location(100, 100, 100) and player's location to oraxen block \"amethyst_ore\""})
+@Name("Set Nexo Blocks within")
+@Description({"Set all blocks within 2 locations to Nexo blocks."})
+@Examples({"set all blocks within location(100, 100, 100) and player's location to nexo block \"amethyst_ore\""})
 public class EffSetBlocksBetween extends Effect {
     private Expression<Location> location1Expr;
     private Expression<Location> location2Expr;
     private Expression<String> BlockId;
 
     static {
-        Skript.registerEffect(EffSetBlocksBetween.class, "(set|place) [all] blocks within %location% and %location% to (custom|oraxen) block %string%");
+        Skript.registerEffect(EffSetBlocksBetween.class, "(set|place) [all] blocks within %location% and %location% to (custom|nexo) block %string%");
     }
 
     @Override
@@ -32,6 +32,7 @@ public class EffSetBlocksBetween extends Effect {
         BlockId = (Expression<String>) exprs[2];
         return true;
     }
+
     @Override
     protected void execute(Event e) {
         Location location1 = location1Expr.getSingle(e);
@@ -53,19 +54,17 @@ public class EffSetBlocksBetween extends Effect {
             for (int y = minY; y <= maxY; y++) {
                 for (int z = minZ; z <= maxZ; z++) {
                     Location location = new Location(location1.getWorld(), x, y, z);
-                    if (OraxenBlocks.isOraxenBlock(customBlockId)) {
-                        OraxenBlocks.place(customBlockId, location);
+                    if (NexoBlocks.isCustomBlock(customBlockId)) {
+                        NexoBlocks.place(customBlockId, location);
                     }
                 }
             }
         }
     }
 
-
     @Override
     public String toString(@Nullable Event e, boolean debug) {
         return "place block " + BlockId.toString(e, debug) + " between locations " + location1Expr.toString(e, debug) + " and " + location2Expr.toString(e, debug);
     }
-
 
 }

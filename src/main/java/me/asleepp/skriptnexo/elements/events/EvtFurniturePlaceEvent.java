@@ -1,4 +1,4 @@
-package me.asleepp.skriptoraxen.elements.events;
+package me.asleepp.skriptnexo.elements.events;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.doc.Description;
@@ -10,31 +10,33 @@ import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.registrations.EventValues;
 import ch.njol.skript.util.Getter;
-import io.th0rgal.oraxen.api.events.furniture.OraxenFurnitureBreakEvent;
-import io.th0rgal.oraxen.api.events.furniture.OraxenFurnitureBreakEvent;
-import io.th0rgal.oraxen.api.events.stringblock.OraxenStringBlockPlaceEvent;
-import org.bukkit.block.Block;
+import io.th0rgal.oraxen.api.events.furniture.OraxenFurniturePlaceEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nullable;
-@Name("On Custom Furniture Break")
-@Description({"Fires when an Oraxen furniture gets broken."})
-@Examples({"on break of custom furniture:"})
+@Name("On Custom Furniture Place")
+@Description({"Fires when an Oraxen furniture gets placed."})
+@Examples({"on place of custom furniture:"})
 @Since("1.0")
-public class EvtFurnitureBreakEvent extends SkriptEvent {
+public class EvtFurniturePlaceEvent extends SkriptEvent {
     private Literal<String> furnitureID;
 
     static {
-        Skript.registerEvent("Furniture Break", EvtFurnitureBreakEvent.class, OraxenFurnitureBreakEvent.class, "break of (custom|oraxen) furniture [%string%]");
-        EventValues.registerEventValue(OraxenFurnitureBreakEvent.class, Player.class, new Getter<Player, OraxenFurnitureBreakEvent>() {
+        Skript.registerEvent("Furniture Place", EvtFurniturePlaceEvent.class, OraxenFurniturePlaceEvent.class, "place of (custom|oraxen) furniture [%string%]");
+        EventValues.registerEventValue(OraxenFurniturePlaceEvent.class, Player.class, new Getter<Player, OraxenFurniturePlaceEvent>() {
             @Override
-            public Player get(OraxenFurnitureBreakEvent arg) {
+            public Player get(OraxenFurniturePlaceEvent arg) {
                 return arg.getPlayer();
             }
         }, 0);
-
+        EventValues.registerEventValue(OraxenFurniturePlaceEvent.class, ItemStack.class, new Getter<ItemStack, OraxenFurniturePlaceEvent>() {
+            @Override
+            public ItemStack get(OraxenFurniturePlaceEvent arg) {
+                return arg.getItemInHand();
+            }
+        }, 0);
     }
 
     @Override
@@ -45,8 +47,8 @@ public class EvtFurnitureBreakEvent extends SkriptEvent {
 
     @Override
     public boolean check(Event e) {
-        if (e instanceof OraxenFurnitureBreakEvent) {
-            OraxenFurnitureBreakEvent event = (OraxenFurnitureBreakEvent) e;
+        if (e instanceof OraxenFurniturePlaceEvent) {
+            OraxenFurniturePlaceEvent event = (OraxenFurniturePlaceEvent) e;
             if (furnitureID == null) {
                 return !event.isCancelled();
             } else {

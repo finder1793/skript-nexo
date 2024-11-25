@@ -1,10 +1,11 @@
-package me.asleepp.skriptoraxen.elements.expressions;
+package me.asleepp.skriptnexo.elements.expressions;
 
 import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
+import ch.njol.skript.doc.RequiredPlugins;
 import ch.njol.skript.doc.Since;
-import io.th0rgal.oraxen.api.OraxenItems;
+import com.nexomc.nexo.api.NexoItems;
 import ch.njol.skript.Skript;
 import ch.njol.skript.aliases.ItemType;
 import ch.njol.skript.lang.Expression;
@@ -16,23 +17,30 @@ import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nullable;
-@Name("Oraxe Item")
-@Description({"Gets an Oraxen item."})
-@Examples({"give player oraxen item \"amethyst\""})
+@Name("Nexo Item")
+@Description({"Gets an Nexo item."})
+@Examples({"give player nexo item \"amethyst\""})
 @Since("1.0")
+@RequiredPlugins("Nexo")
 public class ExprGetCustomItem extends SimpleExpression<ItemType> {
 
     private Expression<String> id;
 
     static {
-        Skript.registerExpression(ExprGetCustomItem.class, ItemType.class, ExpressionType.SIMPLE, "(custom|oraxen) item %string%");
+        Skript.registerExpression(ExprGetCustomItem.class, ItemType.class, ExpressionType.SIMPLE, "(custom|nexo) item %string%");
+    }
+
+    @Override
+    public boolean init(Expression<?>[] exprs, int matchedPattern, Kleenean isDelayed, SkriptParser.ParseResult parseResult) {
+        id = (Expression<String>) exprs[0];
+        return true;
     }
 
     @Override
     protected ItemType[] get(Event e) {
         String oraxenId = id.getSingle(e);
-        if (OraxenItems.exists(oraxenId)) {
-            ItemStack item = OraxenItems.getItemById(oraxenId).build();
+        if (NexoItems.exists(oraxenId)) {
+            ItemStack item = NexoItems.itemFromId(oraxenId).build();
             return new ItemType[]{new ItemType(item)};
         }
         return null;
@@ -51,11 +59,5 @@ public class ExprGetCustomItem extends SimpleExpression<ItemType> {
     @Override
     public String toString(@Nullable Event e, boolean debug) {
         return "Oraxen item " + id.toString(e, debug);
-    }
-
-    @Override
-    public boolean init(Expression<?>[] exprs, int matchedPattern, Kleenean isDelayed, SkriptParser.ParseResult parseResult) {
-        id = (Expression<String>) exprs[0];
-        return true;
     }
 }

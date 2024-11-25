@@ -1,4 +1,4 @@
-package me.asleepp.skriptoraxen.elements.events;
+package me.asleepp.skriptnexo.elements.events;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.doc.Description;
