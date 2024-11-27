@@ -10,14 +10,14 @@ import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.registrations.EventValues;
 import ch.njol.skript.util.Getter;
-import io.th0rgal.oraxen.api.events.stringblock.OraxenStringBlockDamageEvent;
+import com.nexomc.nexo.api.events.stringblock.NexoStringBlockDamageEvent;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
 import javax.annotation.Nullable;
 @Name("On Custom String Block Damage")
-@Description({"Fires when a Oraxen string block gets damaged."})
+@Description({"Fires when a Nexo string block gets damaged."})
 @Examples({"on damage of custom string block:"})
 @Since("1.0")
 public class EvtStringBlockDamageEvent extends SkriptEvent {
@@ -25,16 +25,16 @@ public class EvtStringBlockDamageEvent extends SkriptEvent {
     private Literal<String> stringBlockID;
 
     static {
-        Skript.registerEvent("String Block Damage", EvtStringBlockDamageEvent.class, OraxenStringBlockDamageEvent.class, "damage of (custom|oraxen) string block [%string%]");
-        EventValues.registerEventValue(OraxenStringBlockDamageEvent.class, Player.class, new Getter<Player, OraxenStringBlockDamageEvent>() {
+        Skript.registerEvent("String Block Damage", EvtStringBlockDamageEvent.class, NexoStringBlockDamageEvent.class, "damage of (custom|Nexo) string block [%string%]");
+        EventValues.registerEventValue(NexoStringBlockDamageEvent.class, Player.class, new Getter<Player, NexoStringBlockDamageEvent>() {
             @Override
-            public Player get(OraxenStringBlockDamageEvent arg) {
+            public Player get(NexoStringBlockDamageEvent arg) {
                 return arg.getPlayer();
             }
         }, 0);
-        EventValues.registerEventValue(OraxenStringBlockDamageEvent.class, Block.class, new Getter<Block, OraxenStringBlockDamageEvent>() {
+        EventValues.registerEventValue(NexoStringBlockDamageEvent.class, Block.class, new Getter<Block, NexoStringBlockDamageEvent>() {
             @Override
-            public Block get(OraxenStringBlockDamageEvent arg) {
+            public Block get(NexoStringBlockDamageEvent arg) {
                 return arg.getBlock();
             }
         }, 0);
@@ -47,8 +47,8 @@ public class EvtStringBlockDamageEvent extends SkriptEvent {
 
     @Override
     public boolean check(Event e) {
-        if (e instanceof OraxenStringBlockDamageEvent) {
-            OraxenStringBlockDamageEvent event = (OraxenStringBlockDamageEvent) e;
+        if (e instanceof NexoStringBlockDamageEvent) {
+            NexoStringBlockDamageEvent event = (NexoStringBlockDamageEvent) e;
             if (stringBlockID == null) {
                 return !event.isCancelled();
             } else {

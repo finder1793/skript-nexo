@@ -10,14 +10,14 @@ import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.registrations.EventValues;
 import ch.njol.skript.util.Getter;
-import io.th0rgal.oraxen.api.events.furniture.OraxenFurnitureDamageEvent;
-import io.th0rgal.oraxen.api.events.furniture.OraxenFurnitureInteractEvent;
+import com.nexomc.nexo.api.events.furniture.NexoFurnitureDamageEvent;
+import com.nexomc.nexo.api.events.furniture.NexoFurnitureInteractEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
 import javax.annotation.Nullable;
 @Name("On Custom Furniture Damage")
-@Description({"Fires when an Oraxen furniture gets damaged."})
+@Description({"Fires when an Nexo furniture gets damaged."})
 @Examples({"on damage of custom furniture:"})
 @Since("1.0")
 public class EvtFurnitureDamageEvent extends SkriptEvent {
@@ -25,10 +25,10 @@ public class EvtFurnitureDamageEvent extends SkriptEvent {
     private Literal<String> furnitureID;
 
     static{
-        Skript.registerEvent("Furniture Damage", EvtFurnitureDamageEvent.class, OraxenFurnitureDamageEvent.class, "(hurt|damage) of (custom|oraxen) furniture [%string%]");
-        EventValues.registerEventValue(OraxenFurnitureDamageEvent.class, Player.class, new Getter<Player, OraxenFurnitureDamageEvent>() {
+        Skript.registerEvent("Furniture Damage", EvtFurnitureDamageEvent.class, NexoFurnitureDamageEvent.class, "(hurt|damage) of (custom|Nexo) furniture [%string%]");
+        EventValues.registerEventValue(NexoFurnitureDamageEvent.class, Player.class, new Getter<Player, NexoFurnitureDamageEvent>() {
             @Override
-            public Player get(OraxenFurnitureDamageEvent arg) {
+            public Player get(NexoFurnitureDamageEvent arg) {
                 return arg.getPlayer();
             }
         }, 0);
@@ -41,8 +41,8 @@ public class EvtFurnitureDamageEvent extends SkriptEvent {
 
     @Override
     public boolean check(Event e) {
-        if (e instanceof OraxenFurnitureDamageEvent) {
-            OraxenFurnitureDamageEvent event = (OraxenFurnitureDamageEvent) e;
+        if (e instanceof NexoFurnitureDamageEvent) {
+            NexoFurnitureDamageEvent event = (NexoFurnitureDamageEvent) e;
             if (furnitureID == null) {
                 return !event.isCancelled();
             } else {

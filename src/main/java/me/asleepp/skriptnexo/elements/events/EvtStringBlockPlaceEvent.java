@@ -10,7 +10,7 @@ import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.registrations.EventValues;
 import ch.njol.skript.util.Getter;
-import io.th0rgal.oraxen.api.events.stringblock.OraxenStringBlockPlaceEvent;
+import com.nexomc.nexo.api.events.stringblock.NexoStringBlockPlaceEvent;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -18,7 +18,7 @@ import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nullable;
 @Name("On Custom String Block Place")
-@Description({"Fires when a Oraxen string block gets placed."})
+@Description({"Fires when a Nexo string block gets placed."})
 @Examples({"on place of custom string block:"})
 @Since("1.0")
 public class EvtStringBlockPlaceEvent extends SkriptEvent {
@@ -26,22 +26,22 @@ public class EvtStringBlockPlaceEvent extends SkriptEvent {
     private Literal<String> stringBlockID;
 
     static {
-        Skript.registerEvent("String Block Place", EvtStringBlockPlaceEvent.class, OraxenStringBlockPlaceEvent.class, "break of (custom|oraxen) string block [%string%]");
-        EventValues.registerEventValue(OraxenStringBlockPlaceEvent.class, Player.class, new Getter<Player, OraxenStringBlockPlaceEvent>() {
+        Skript.registerEvent("String Block Place", EvtStringBlockPlaceEvent.class, NexoStringBlockPlaceEvent.class, "break of (custom|Nexo) string block [%string%]");
+        EventValues.registerEventValue(NexoStringBlockPlaceEvent.class, Player.class, new Getter<Player, NexoStringBlockPlaceEvent>() {
             @Override
-            public Player get(OraxenStringBlockPlaceEvent arg) {
+            public Player get(NexoStringBlockPlaceEvent arg) {
                 return arg.getPlayer();
             }
         }, 0);
-        EventValues.registerEventValue(OraxenStringBlockPlaceEvent.class, Block.class, new Getter<Block, OraxenStringBlockPlaceEvent>() {
+        EventValues.registerEventValue(NexoStringBlockPlaceEvent.class, Block.class, new Getter<Block, NexoStringBlockPlaceEvent>() {
             @Override
-            public Block get(OraxenStringBlockPlaceEvent arg) {
+            public Block get(NexoStringBlockPlaceEvent arg) {
                 return arg.getBlock();
             }
         }, 0);
-        EventValues.registerEventValue(OraxenStringBlockPlaceEvent.class, ItemStack.class, new Getter<ItemStack, OraxenStringBlockPlaceEvent>() {
+        EventValues.registerEventValue(NexoStringBlockPlaceEvent.class, ItemStack.class, new Getter<ItemStack, NexoStringBlockPlaceEvent>() {
             @Override
-            public ItemStack get(OraxenStringBlockPlaceEvent arg) {
+            public ItemStack get(NexoStringBlockPlaceEvent arg) {
                 return arg.getItemInHand();
             }
         }, 0);
@@ -55,8 +55,8 @@ public class EvtStringBlockPlaceEvent extends SkriptEvent {
 
     @Override
     public boolean check(Event e) {
-        if (e instanceof OraxenStringBlockPlaceEvent) {
-            OraxenStringBlockPlaceEvent event = (OraxenStringBlockPlaceEvent) e;
+        if (e instanceof NexoStringBlockPlaceEvent) {
+            NexoStringBlockPlaceEvent event = (NexoStringBlockPlaceEvent) e;
             if (stringBlockID == null) {
                 return !event.isCancelled();
             } else {

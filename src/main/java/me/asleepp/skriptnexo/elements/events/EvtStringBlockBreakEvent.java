@@ -10,17 +10,17 @@ import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.registrations.EventValues;
 import ch.njol.skript.util.Getter;
-import io.th0rgal.oraxen.api.events.noteblock.OraxenNoteBlockInteractEvent;
-import io.th0rgal.oraxen.api.events.stringblock.OraxenStringBlockBreakEvent;
-import io.th0rgal.oraxen.api.events.stringblock.OraxenStringBlockInteractEvent;
-import io.th0rgal.oraxen.utils.drops.Drop;
+import com.nexomc.nexo.api.events.noteblock.NexoNoteBlockInteractEvent;
+import com.nexomc.nexo.api.events.stringblock.NexoStringBlockBreakEvent;
+import com.nexomc.nexo.api.events.stringblock.NexoStringBlockInteractEvent;
+import com.nexomc.nexo.utils.drops.Drop;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
 import javax.annotation.Nullable;
 @Name("On Custom String Block Break")
-@Description({"Fires when a Oraxen string block gets broken."})
+@Description({"Fires when a Nexo string block gets broken."})
 @Examples({"on break of custom string block:"})
 @Since("1.0")
 public class EvtStringBlockBreakEvent extends SkriptEvent {
@@ -28,22 +28,22 @@ public class EvtStringBlockBreakEvent extends SkriptEvent {
     private Literal<String> stringBlockID;
 
     static {
-        Skript.registerEvent("String Block Break", EvtStringBlockBreakEvent.class, OraxenStringBlockBreakEvent.class, "break of (custom|oraxen) string block [%string%]");
-        EventValues.registerEventValue(OraxenStringBlockBreakEvent.class, Player.class, new Getter<Player, OraxenStringBlockBreakEvent>() {
+        Skript.registerEvent("String Block Break", EvtStringBlockBreakEvent.class, NexoStringBlockBreakEvent.class, "break of (custom|Nexo) string block [%string%]");
+        EventValues.registerEventValue(NexoStringBlockBreakEvent.class, Player.class, new Getter<Player, NexoStringBlockBreakEvent>() {
             @Override
-            public Player get(OraxenStringBlockBreakEvent arg) {
+            public Player get(NexoStringBlockBreakEvent arg) {
                 return arg.getPlayer();
             }
         },0);
-        EventValues.registerEventValue(OraxenStringBlockBreakEvent.class, Block.class, new Getter<Block, OraxenStringBlockBreakEvent>() {
+        EventValues.registerEventValue(NexoStringBlockBreakEvent.class, Block.class, new Getter<Block, NexoStringBlockBreakEvent>() {
             @Override
-            public Block get(OraxenStringBlockBreakEvent arg) {
+            public Block get(NexoStringBlockBreakEvent arg) {
                 return arg.getBlock();
             }
         },0);
-        EventValues.registerEventValue(OraxenStringBlockBreakEvent.class, Drop.class, new Getter<Drop, OraxenStringBlockBreakEvent>() {
+        EventValues.registerEventValue(NexoStringBlockBreakEvent.class, Drop.class, new Getter<Drop, NexoStringBlockBreakEvent>() {
             @Override
-            public Drop get(OraxenStringBlockBreakEvent arg) {
+            public Drop get(NexoStringBlockBreakEvent arg) {
                 return arg.getDrop();
             }
         },0);
@@ -57,8 +57,8 @@ public class EvtStringBlockBreakEvent extends SkriptEvent {
 
     @Override
     public boolean check(Event e) {
-        if (e instanceof OraxenStringBlockBreakEvent) {
-            OraxenStringBlockBreakEvent event = (OraxenStringBlockBreakEvent) e;
+        if (e instanceof NexoStringBlockBreakEvent) {
+            NexoStringBlockBreakEvent event = (NexoStringBlockBreakEvent) e;
             if (stringBlockID == null) {
                 return !event.isCancelled();
             } else {

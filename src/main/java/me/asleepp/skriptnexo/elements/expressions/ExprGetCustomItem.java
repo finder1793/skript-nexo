@@ -38,9 +38,9 @@ public class ExprGetCustomItem extends SimpleExpression<ItemType> {
 
     @Override
     protected ItemType[] get(Event e) {
-        String oraxenId = id.getSingle(e);
-        if (NexoItems.exists(oraxenId)) {
-            ItemStack item = NexoItems.itemFromId(oraxenId).build();
+        String nexoId = id.getSingle(e);
+        if (NexoItems.exists(nexoId)) {
+            ItemStack item = NexoItems.itemFromId(nexoId).build();
             return new ItemType[]{new ItemType(item)};
         }
         return null;
@@ -58,6 +58,6 @@ public class ExprGetCustomItem extends SimpleExpression<ItemType> {
 
     @Override
     public String toString(@Nullable Event e, boolean debug) {
-        return "Oraxen item " + id.toString(e, debug);
+        return "Nexo item " + id.toString(e, debug);
     }
 }

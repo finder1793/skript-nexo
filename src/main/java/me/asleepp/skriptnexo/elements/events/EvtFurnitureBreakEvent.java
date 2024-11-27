@@ -10,24 +10,24 @@ import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.registrations.EventValues;
 import ch.njol.skript.util.Getter;
-import io.th0rgal.oraxen.api.events.furniture.OraxenFurnitureBreakEvent;
-import io.th0rgal.oraxen.api.events.stringblock.OraxenStringBlockPlaceEvent;
+import com.nexomc.nexo.api.events.furniture.NexoFurnitureBreakEvent;
+import com.nexomc.nexo.api.events.stringblock.NexoStringBlockPlaceEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
 import javax.annotation.Nullable;
 @Name("On Custom Furniture Break")
-@Description({"Fires when an Oraxen furniture gets broken."})
+@Description({"Fires when an Nexo furniture gets broken."})
 @Examples({"on break of custom furniture:"})
 @Since("1.0")
 public class EvtFurnitureBreakEvent extends SkriptEvent {
     private Literal<String> furnitureID;
 
     static {
-        Skript.registerEvent("Furniture Break", EvtFurnitureBreakEvent.class, OraxenFurnitureBreakEvent.class, "break of (custom|oraxen) furniture [%string%]");
-        EventValues.registerEventValue(OraxenFurnitureBreakEvent.class, Player.class, new Getter<Player, OraxenFurnitureBreakEvent>() {
+        Skript.registerEvent("Furniture Break", EvtFurnitureBreakEvent.class, NexoFurnitureBreakEvent.class, "break of (custom|Nexo) furniture [%string%]");
+        EventValues.registerEventValue(NexoFurnitureBreakEvent.class, Player.class, new Getter<Player, NexoFurnitureBreakEvent>() {
             @Override
-            public Player get(OraxenFurnitureBreakEvent arg) {
+            public Player get(NexoFurnitureBreakEvent arg) {
                 return arg.getPlayer();
             }
         }, 0);
@@ -42,8 +42,8 @@ public class EvtFurnitureBreakEvent extends SkriptEvent {
 
     @Override
     public boolean check(Event e) {
-        if (e instanceof OraxenFurnitureBreakEvent) {
-            OraxenFurnitureBreakEvent event = (OraxenFurnitureBreakEvent) e;
+        if (e instanceof NexoFurnitureBreakEvent) {
+            NexoFurnitureBreakEvent event = (NexoFurnitureBreakEvent) e;
             if (furnitureID == null) {
                 return !event.isCancelled();
             } else {

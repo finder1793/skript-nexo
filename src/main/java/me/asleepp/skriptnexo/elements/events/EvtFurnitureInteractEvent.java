@@ -10,30 +10,30 @@ import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.registrations.EventValues;
 import ch.njol.skript.util.Getter;
-import io.th0rgal.oraxen.api.events.furniture.OraxenFurnitureInteractEvent;
+import com.nexomc.nexo.api.events.furniture.NexoFurnitureInteractEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nullable;
 @Name("On Custom Furniture Interact")
-@Description({"Fires when an Oraxen furniture gets interacted with."})
+@Description({"Fires when an Nexo furniture gets interacted with."})
 @Examples({"on interact with custom furniture:"})
 @Since("1.0")
 public class EvtFurnitureInteractEvent extends SkriptEvent {
     private Literal<String> furnitureID;
 
     static {
-        Skript.registerEvent("Furniture Break", EvtFurnitureInteractEvent.class, OraxenFurnitureInteractEvent.class, "interact with (custom|oraxen) furniture [%string%]");
-        EventValues.registerEventValue(OraxenFurnitureInteractEvent.class, Player.class, new Getter<Player, OraxenFurnitureInteractEvent>() {
+        Skript.registerEvent("Furniture Break", EvtFurnitureInteractEvent.class, NexoFurnitureInteractEvent.class, "interact with (custom|Nexo) furniture [%string%]");
+        EventValues.registerEventValue(NexoFurnitureInteractEvent.class, Player.class, new Getter<Player, NexoFurnitureInteractEvent>() {
             @Override
-            public Player get(OraxenFurnitureInteractEvent arg) {
+            public Player get(NexoFurnitureInteractEvent arg) {
                 return arg.getPlayer();
             }
         }, 0);
-        EventValues.registerEventValue(OraxenFurnitureInteractEvent.class, ItemStack.class, new Getter<ItemStack, OraxenFurnitureInteractEvent>() {
+        EventValues.registerEventValue(NexoFurnitureInteractEvent.class, ItemStack.class, new Getter<ItemStack, NexoFurnitureInteractEvent>() {
             @Override
-            public ItemStack get(OraxenFurnitureInteractEvent arg) {
+            public ItemStack get(NexoFurnitureInteractEvent arg) {
                 return arg.getItemInHand();
             }
         }, 0);
@@ -47,8 +47,8 @@ public class EvtFurnitureInteractEvent extends SkriptEvent {
 
     @Override
     public boolean check(Event e) {
-        if (e instanceof OraxenFurnitureInteractEvent) {
-            OraxenFurnitureInteractEvent event = (OraxenFurnitureInteractEvent) e;
+        if (e instanceof NexoFurnitureInteractEvent) {
+            NexoFurnitureInteractEvent event = (NexoFurnitureInteractEvent) e;
             if (furnitureID == null) {
                 return !event.isCancelled();
             } else {

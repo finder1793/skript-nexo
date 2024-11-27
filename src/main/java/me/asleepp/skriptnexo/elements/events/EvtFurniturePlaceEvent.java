@@ -10,30 +10,30 @@ import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.registrations.EventValues;
 import ch.njol.skript.util.Getter;
-import io.th0rgal.oraxen.api.events.furniture.OraxenFurniturePlaceEvent;
+import com.nexomc.nexo.api.events.furniture.NexoFurniturePlaceEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nullable;
 @Name("On Custom Furniture Place")
-@Description({"Fires when an Oraxen furniture gets placed."})
+@Description({"Fires when an Nexo furniture gets placed."})
 @Examples({"on place of custom furniture:"})
 @Since("1.0")
 public class EvtFurniturePlaceEvent extends SkriptEvent {
     private Literal<String> furnitureID;
 
     static {
-        Skript.registerEvent("Furniture Place", EvtFurniturePlaceEvent.class, OraxenFurniturePlaceEvent.class, "place of (custom|oraxen) furniture [%string%]");
-        EventValues.registerEventValue(OraxenFurniturePlaceEvent.class, Player.class, new Getter<Player, OraxenFurniturePlaceEvent>() {
+        Skript.registerEvent("Furniture Place", EvtFurniturePlaceEvent.class, NexoFurniturePlaceEvent.class, "place of (custom|Nexo) furniture [%string%]");
+        EventValues.registerEventValue(NexoFurniturePlaceEvent.class, Player.class, new Getter<Player, NexoFurniturePlaceEvent>() {
             @Override
-            public Player get(OraxenFurniturePlaceEvent arg) {
+            public Player get(NexoFurniturePlaceEvent arg) {
                 return arg.getPlayer();
             }
         }, 0);
-        EventValues.registerEventValue(OraxenFurniturePlaceEvent.class, ItemStack.class, new Getter<ItemStack, OraxenFurniturePlaceEvent>() {
+        EventValues.registerEventValue(NexoFurniturePlaceEvent.class, ItemStack.class, new Getter<ItemStack, NexoFurniturePlaceEvent>() {
             @Override
-            public ItemStack get(OraxenFurniturePlaceEvent arg) {
+            public ItemStack get(NexoFurniturePlaceEvent arg) {
                 return arg.getItemInHand();
             }
         }, 0);
@@ -47,8 +47,8 @@ public class EvtFurniturePlaceEvent extends SkriptEvent {
 
     @Override
     public boolean check(Event e) {
-        if (e instanceof OraxenFurniturePlaceEvent) {
-            OraxenFurniturePlaceEvent event = (OraxenFurniturePlaceEvent) e;
+        if (e instanceof NexoFurniturePlaceEvent) {
+            NexoFurniturePlaceEvent event = (NexoFurniturePlaceEvent) e;
             if (furnitureID == null) {
                 return !event.isCancelled();
             } else {
