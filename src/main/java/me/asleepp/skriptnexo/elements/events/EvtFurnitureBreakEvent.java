@@ -11,7 +11,7 @@ import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.registrations.EventValues;
 import ch.njol.skript.util.Getter;
 import com.nexomc.nexo.api.events.furniture.NexoFurnitureBreakEvent;
-import com.nexomc.nexo.api.events.stringblock.NexoStringBlockPlaceEvent;
+import com.nexomc.nexo.api.events.custom_block.stringblock.NexoStringBlockPlaceEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
