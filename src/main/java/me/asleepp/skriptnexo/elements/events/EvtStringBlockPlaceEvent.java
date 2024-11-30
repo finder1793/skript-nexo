@@ -26,7 +26,7 @@ public class EvtStringBlockPlaceEvent extends SkriptEvent {
     private Literal<String> stringBlockID;
 
     static {
-        Skript.registerEvent("String Block Place", EvtStringBlockPlaceEvent.class, NexoStringBlockPlaceEvent.class, "break of (custom|Nexo) string block [%string%]");
+        Skript.registerEvent("String Block Place", EvtStringBlockPlaceEvent.class, NexoStringBlockPlaceEvent.class, "place of (custom|Nexo) string block [%string%]");
         EventValues.registerEventValue(NexoStringBlockPlaceEvent.class, Player.class, new Getter<Player, NexoStringBlockPlaceEvent>() {
             @Override
             public Player get(NexoStringBlockPlaceEvent arg) {
