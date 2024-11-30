@@ -24,7 +24,7 @@ public class EvtFurnitureInteractEvent extends SkriptEvent {
     private Literal<String> furnitureID;
 
     static {
-        Skript.registerEvent("Furniture Break", EvtFurnitureInteractEvent.class, NexoFurnitureInteractEvent.class, "interact with (custom|Nexo) furniture [%string%]");
+        Skript.registerEvent("Furniture interact", EvtFurnitureInteractEvent.class, NexoFurnitureInteractEvent.class, "interact with (custom|Nexo) furniture [%string%]");
         EventValues.registerEventValue(NexoFurnitureInteractEvent.class, Player.class, new Getter<Player, NexoFurnitureInteractEvent>() {
             @Override
             public Player get(NexoFurnitureInteractEvent arg) {
