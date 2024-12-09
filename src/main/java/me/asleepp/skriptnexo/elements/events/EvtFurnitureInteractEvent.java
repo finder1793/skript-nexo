@@ -14,6 +14,7 @@ import com.nexomc.nexo.api.events.furniture.NexoFurnitureInteractEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.Location;
 
 import javax.annotation.Nullable;
 @Name("On Custom Furniture Interact")
@@ -35,6 +36,12 @@ public class EvtFurnitureInteractEvent extends SkriptEvent {
             @Override
             public ItemStack get(NexoFurnitureInteractEvent arg) {
                 return arg.getItemInHand();
+            }
+        }, 0);
+        EventValues.registerEventValue(NexoFurnitureInteractEvent.class, Location.class, new Getter<Location, NexoFurnitureInteractEvent>() {
+            @Override
+            public Location get(NexoFurnitureInteractEvent event) {
+                return event.getBaseEntity().getLocation();
             }
         }, 0);
     }
