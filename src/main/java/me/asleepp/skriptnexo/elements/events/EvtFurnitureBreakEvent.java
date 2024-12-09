@@ -14,8 +14,10 @@ import com.nexomc.nexo.api.events.furniture.NexoFurnitureBreakEvent;
 import com.nexomc.nexo.api.events.custom_block.stringblock.NexoStringBlockPlaceEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
+import org.bukkit.Location;
 
 import javax.annotation.Nullable;
+
 @Name("On Custom Furniture Break")
 @Description({"Fires when an Nexo furniture gets broken."})
 @Examples({"on break of custom furniture:"})
@@ -31,7 +33,12 @@ public class EvtFurnitureBreakEvent extends SkriptEvent {
                 return arg.getPlayer();
             }
         }, 0);
-
+        EventValues.registerEventValue(NexoFurnitureBreakEvent.class, Location.class, new Getter<Location, NexoFurnitureBreakEvent>() {
+            @Override
+            public Location get(NexoFurnitureBreakEvent event) {
+                return event.getBaseEntity().getLocation();
+            }
+        }, 0);
     }
 
     @Override

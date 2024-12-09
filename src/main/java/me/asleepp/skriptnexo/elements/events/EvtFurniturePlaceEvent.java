@@ -12,6 +12,7 @@ import ch.njol.skript.registrations.EventValues;
 import ch.njol.skript.util.Getter;
 import com.nexomc.nexo.api.events.furniture.NexoFurniturePlaceEvent;
 import org.bukkit.entity.Player;
+import org.bukkit.Location;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
 
@@ -35,6 +36,12 @@ public class EvtFurniturePlaceEvent extends SkriptEvent {
             @Override
             public ItemStack get(NexoFurniturePlaceEvent arg) {
                 return arg.getItemInHand();
+            }
+        }, 0);
+        EventValues.registerEventValue(NexoFurniturePlaceEvent.class, Location.class, new Getter<Location, NexoFurniturePlaceEvent>() {
+            @Override
+            public Location get(NexoFurniturePlaceEvent event) {
+                return event.getBaseEntity().getLocation();
             }
         }, 0);
     }
