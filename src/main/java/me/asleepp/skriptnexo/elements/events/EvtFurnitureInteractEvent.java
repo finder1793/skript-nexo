@@ -16,10 +16,11 @@ import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
+import org.bukkit.Bukkit;
 
 import javax.annotation.Nullable;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
 @Name("On Custom Furniture Interact")
 @Description({"Fires when an Nexo furniture gets interacted with."})
@@ -27,7 +28,8 @@ import java.util.Set;
 @Since("1.0")
 public class EvtFurnitureInteractEvent extends SkriptEvent {
     private Literal<String> furnitureID;
-    private final Set<NexoFurnitureInteractEvent> processedEvents = new HashSet<>();
+    private final Map<Player, Long> lastEventTimestamps = new HashMap<>();
+    private static final int TICK_LIMIT = 10; // Number of ticks to limit the event
 
     static {
         Skript.registerEvent("Furniture interact", EvtFurnitureInteractEvent.class, NexoFurnitureInteractEvent.class, "interact with (custom|Nexo) furniture [%string%]");
@@ -67,10 +69,15 @@ public class EvtFurnitureInteractEvent extends SkriptEvent {
     public boolean check(Event e) {
         if (e instanceof NexoFurnitureInteractEvent) {
             NexoFurnitureInteractEvent event = (NexoFurnitureInteractEvent) e;
-            if (processedEvents.contains(event)) {
-                return false; // Ignore the second firing of the event
+            Player player = event.getPlayer();
+            long currentTick = Bukkit.getCurrentTick();
+            Long lastProcessedTick = lastEventTimestamps.get(player);
+
+            if (lastProcessedTick != null && (currentTick - lastProcessedTick) < TICK_LIMIT) {
+                return false; // Ignore the event if it was processed within the tick limit
             }
-            processedEvents.add(event);
+
+            lastEventTimestamps.put(player, currentTick);
 
             if (furnitureID == null) {
                 return !event.isCancelled();
