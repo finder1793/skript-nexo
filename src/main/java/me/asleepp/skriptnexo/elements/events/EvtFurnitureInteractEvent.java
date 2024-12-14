@@ -57,6 +57,12 @@ public class EvtFurnitureInteractEvent extends SkriptEvent {
                 return event.getBlockFace();
             }
         }, 0);
+        EventValues.registerEventValue(NexoFurnitureInteractEvent.class, EquipmentSlot.class, new Getter<EquipmentSlot, NexoFurnitureInteractEvent>() {
+            @Override
+            public EquipmentSlot get(NexoFurnitureInteractEvent event) {
+                return event.getHand();
+            }
+        }, 0);
     }
 
     @Override
