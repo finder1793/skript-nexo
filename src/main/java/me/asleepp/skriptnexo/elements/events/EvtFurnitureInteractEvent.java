@@ -32,17 +32,10 @@ public class EvtFurnitureInteractEvent extends SkriptEvent {
                 return arg.getPlayer();
             }
         }, 0);
-            @Override
         EventValues.registerEventValue(NexoFurnitureInteractEvent.class, ItemStack.class, new Getter<ItemStack, NexoFurnitureInteractEvent>() {
             @Override
             public ItemStack get(NexoFurnitureInteractEvent arg) {
                 return arg.getItemInHand();
-            }
-        }, 0);
-        EventValues.registerEventValue(NexoFurnitureInteractEvent.class, new Getter<NexoFurnitureInteractEvent>() {
-            @Override
-            public BlockFace get(NexoFurnitureInteractEvent arg) {
-                return arg.getblockFace();
             }
         }, 0);
         EventValues.registerEventValue(NexoFurnitureInteractEvent.class, Location.class, new Getter<Location, NexoFurnitureInteractEvent>() {
@@ -51,7 +44,12 @@ public class EvtFurnitureInteractEvent extends SkriptEvent {
                 return event.getBaseEntity().getLocation();
             }
         }, 0);
-
+        EventValues.registerEventValue(NexoFurnitureInteractEvent.class, new Getter<NexoFurnitureInteractEvent>() {
+            @Override
+            public BlockFace get(NexoFurnitureInteractEvent arg) {
+                return arg.getblockFace();
+            }
+        }, 0);
     }
 
     @Override
