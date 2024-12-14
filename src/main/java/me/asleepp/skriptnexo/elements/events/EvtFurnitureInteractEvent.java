@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.Location;
-import org.bukkit.BlockFace;
+import org.bukkit.block.BlockFace;
 
 import javax.annotation.Nullable;
 @Name("On Custom Furniture Interact")
