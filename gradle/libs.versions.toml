@@ -4,7 +4,7 @@ lombok = "1.18.34"
 shadow = "8.1.8"
 run-paper = "2.3.0"
 skript = "2.7.1"
-nexo = "0.1.0-dev.0"
+nexo = "0.6.0-dev.3"
 
 [libraries]
 paper-api = { module = "io.papermc.paper:paper-api", version.ref = "paper-api" }
