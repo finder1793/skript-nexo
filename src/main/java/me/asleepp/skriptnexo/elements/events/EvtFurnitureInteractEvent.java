@@ -18,12 +18,16 @@ import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
 
 import javax.annotation.Nullable;
+import java.util.HashSet;
+import java.util.Set;
+
 @Name("On Custom Furniture Interact")
 @Description({"Fires when an Nexo furniture gets interacted with."})
 @Examples({"on interact with custom furniture:"})
 @Since("1.0")
 public class EvtFurnitureInteractEvent extends SkriptEvent {
     private Literal<String> furnitureID;
+    private final Set<NexoFurnitureInteractEvent> processedEvents = new HashSet<>();
 
     static {
         Skript.registerEvent("Furniture interact", EvtFurnitureInteractEvent.class, NexoFurnitureInteractEvent.class, "interact with (custom|Nexo) furniture [%string%]");
@@ -63,6 +67,11 @@ public class EvtFurnitureInteractEvent extends SkriptEvent {
     public boolean check(Event e) {
         if (e instanceof NexoFurnitureInteractEvent) {
             NexoFurnitureInteractEvent event = (NexoFurnitureInteractEvent) e;
+            if (processedEvents.contains(event)) {
+                return false; // Ignore the second firing of the event
+            }
+            processedEvents.add(event);
+
             if (furnitureID == null) {
                 return !event.isCancelled();
             } else {
