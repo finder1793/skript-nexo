@@ -48,7 +48,7 @@ public class EvtFurnitureInteractEvent extends SkriptEvent {
         EventValues.registerEventValue(NexoFurnitureInteractEvent.class, BlockFace.class, new Getter<BlockFace, NexoFurnitureInteractEvent>() {
             @Override
             public BlockFace get(NexoFurnitureInteractEvent event) {
-                return event.blockFace();
+                return event.BlockFace();
             }
         }, 0);
     }
