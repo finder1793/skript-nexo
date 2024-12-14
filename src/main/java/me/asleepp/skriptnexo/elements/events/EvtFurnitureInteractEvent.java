@@ -38,18 +38,19 @@ public class EvtFurnitureInteractEvent extends SkriptEvent {
                 return arg.getItemInHand();
             }
         }, 0);
+        EventValues.registerEventValue(NexoFurnitureInteractEvent.class, new Getter<NexoFurnitureInteractEvent>() {
+            @Override
+            public BlockFace get(NexoFurnitureInteractEvent arg) {
+                return arg.getblockFace();
+            }
+        }, 0);
         EventValues.registerEventValue(NexoFurnitureInteractEvent.class, Location.class, new Getter<Location, NexoFurnitureInteractEvent>() {
             @Override
             public Location get(NexoFurnitureInteractEvent event) {
                 return event.getBaseEntity().getLocation();
             }
         }, 0);
-        EventValues.registerEventValue(NexoFurnitureInteractEvent.class, new Getter<NexoFurnitureInteractEvent>() {
-            @Override
-            public blockFace get(NexoFurnitureInteractEvent arg) {
-                return event.getblockFace();
-            }
-        }, 0);
+
     }
 
     @Override
