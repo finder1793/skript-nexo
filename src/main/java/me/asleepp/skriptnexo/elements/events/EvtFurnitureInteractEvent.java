@@ -44,7 +44,7 @@ public class EvtFurnitureInteractEvent extends SkriptEvent {
                 return event.getBaseEntity().getLocation();
             }
         }, 0);
-        EventValues.registerEventValue(NexoFurnitureInteractEvent.class, new Getter<BlockDacem NexoFurnitureInteractEvent>() {
+        EventValues.registerEventValue(NexoFurnitureInteractEvent.class, new Getter<BlockFace, NexoFurnitureInteractEvent>() {
             @Override
             public blockFace get(NexoFurnitureInteractEvent arg) {
                 return arg.getblockFace();
