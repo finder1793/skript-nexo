@@ -29,7 +29,7 @@ import java.util.Map;
 public class EvtFurnitureInteractEvent extends SkriptEvent {
     private Literal<String> furnitureID;
     private final Map<Player, Long> lastEventTimestamps = new HashMap<>();
-    private static final int TICK_LIMIT = 10; // Number of ticks to limit the event
+    private static final int TICK_LIMIT = 2; // Number of ticks to limit the event
 
     static {
         Skript.registerEvent("Furniture interact", EvtFurnitureInteractEvent.class, NexoFurnitureInteractEvent.class, "interact with (custom|Nexo) furniture [%string%]");
