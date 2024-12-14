@@ -32,6 +32,7 @@ public class EvtFurnitureInteractEvent extends SkriptEvent {
                 return arg.getPlayer();
             }
         }, 0);
+            @Override
         EventValues.registerEventValue(NexoFurnitureInteractEvent.class, ItemStack.class, new Getter<ItemStack, NexoFurnitureInteractEvent>() {
             @Override
             public ItemStack get(NexoFurnitureInteractEvent arg) {
