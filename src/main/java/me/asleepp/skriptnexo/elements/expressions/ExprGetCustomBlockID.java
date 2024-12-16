@@ -12,6 +12,7 @@ import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
 import com.nexomc.nexo.api.NexoBlocks;
+import com.nexomc.nexo.mechanics.custom_block.CustomBlockMechanic;
 import org.bukkit.block.Block;
 import org.bukkit.event.Event;
 import ch.njol.skript.lang.ExpressionType;
@@ -40,7 +41,11 @@ public class ExprGetCustomBlockID extends SimpleExpression<String> {
         if (block == null) {
             return null;
         }
-        String blockId = NexoBlocks.customBlockMechanic(block).getItemID();
+        CustomBlockMechanic mechanic = NexoBlocks.customBlockMechanic(block.getLocation());
+        if (mechanic == null) {
+            return null;
+        }
+        String blockId = mechanic.getItemID();
         return blockId != null ? new String[]{blockId} : null;
     }
 
