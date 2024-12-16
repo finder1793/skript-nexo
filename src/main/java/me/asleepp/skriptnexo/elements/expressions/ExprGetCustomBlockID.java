@@ -11,37 +11,37 @@ import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
-import com.nexomc.nexo.api.NexoItems;
+import com.nexomc.nexo.api.NexoBlocks;
+import org.bukkit.block.Block;
 import org.bukkit.event.Event;
-import org.bukkit.inventory.ItemStack;
 import ch.njol.skript.lang.ExpressionType;
 
-@Name("Get Custom Item ID")
-@Description("Gets the custom item ID from an item stack.")
-@Examples({"set {_id} to custom item ID of player's tool"})
+@Name("Get Custom Block ID")
+@Description("Gets the custom block ID from a block.")
+@Examples({"set {_id} to custom block ID of target block"})
 @Since("1.0")
-public class ExprGetCustomItemID extends SimpleExpression<String> {
+public class ExprGetCustomBlockID extends SimpleExpression<String> {
 
     static {
-        Skript.registerExpression(ExprGetCustomItemID.class, String.class, ExpressionType.PROPERTY, "(custom|nexo) item ID of %itemstack%");
+        Skript.registerExpression(ExprGetCustomBlockID.class, String.class, ExpressionType.PROPERTY, "(custom|nexo) block ID of %block%");
     }
 
-    private Expression<ItemStack> itemStackExpr;
+    private Expression<Block> blockExpr;
 
     @Override
     public boolean init(Expression<?>[] exprs, int matchedPattern, Kleenean isDelayed, SkriptParser.ParseResult parseResult) {
-        itemStackExpr = (Expression<ItemStack>) exprs[0];
+        blockExpr = (Expression<Block>) exprs[0];
         return true;
     }
 
     @Override
     protected String[] get(Event e) {
-        ItemStack itemStack = itemStackExpr.getSingle(e);
-        if (itemStack == null) {
+        Block block = blockExpr.getSingle(e);
+        if (block == null) {
             return null;
         }
-        String itemId = NexoItems.idFromItem(itemStack);
-        return itemId != null ? new String[]{itemId} : null;
+        String blockId = NexoBlocks.customBlockMechanic(block).getItemID();
+        return blockId != null ? new String[]{blockId} : null;
     }
 
     @Override
@@ -56,7 +56,7 @@ public class ExprGetCustomItemID extends SimpleExpression<String> {
 
     @Override
     public String toString(Event e, boolean debug) {
-        return "custom item ID of " + itemStackExpr.toString(e, debug);
+        return "custom block ID of " + blockExpr.toString(e, debug);
     }
 
     @Override
