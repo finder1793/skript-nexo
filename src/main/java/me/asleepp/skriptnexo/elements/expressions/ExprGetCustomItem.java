@@ -15,7 +15,7 @@ import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
-import ch.njol.skript.lang.ExpressionType;
+
 
 import javax.annotation.Nullable;
 @Name("Nexo Item")

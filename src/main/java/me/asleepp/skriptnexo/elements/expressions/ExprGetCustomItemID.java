@@ -14,6 +14,7 @@ import ch.njol.util.Kleenean;
 import com.nexomc.nexo.api.NexoItems;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
+import ch.njol.skript.lang.ExpressionType;
 
 @Name("Get Custom Item ID")
 @Description("Gets the custom item ID from an item stack.")
