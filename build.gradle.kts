@@ -17,7 +17,7 @@ repositories {
 
 java {
     disableAutoTargetJvm()
-    toolchain.languageVersion = JavaLanguageVersion.of(21)
+    toolchain.languageVersion.set(JavaLanguageVersion.of(21))
 }
 
 description = "A skript addon that aims to link Nexo and Skript"
@@ -39,16 +39,16 @@ tasks {
     }
 
     shadowJar {
-        archiveFileName = "${rootProject.name}-${project.version}.jar"
-        archiveClassifier = null
+        archiveFileName.set("${rootProject.name}-${project.version}.jar")
+        archiveClassifier.set("")
 
         manifest {
-            attributes["Implementation-Version"] = rootProject.version
+            attributes["Implementation-Version"] = project.version
         }
 
         configurations = listOf(project.configurations.implementation.get())
         minimize()
-        relocate 'team.unnamed.creative', 'me.asleepp.skriptnexo.shadow.team.unnamed.creative'
+        relocate("team.unnamed.creative", "me.asleepp.skriptnexo.shadow.team.unnamed.creative")
     }
 
     assemble {
@@ -57,7 +57,7 @@ tasks {
 
     withType<JavaCompile> {
         options.encoding = Charsets.UTF_8.name()
-        options.release = 17
+        options.release.set(17)
     }
 
     withType<Javadoc> {
@@ -69,9 +69,7 @@ tasks {
         inputs.property("version", project.version)
 
         filesMatching("plugin.yml") {
-            expand(
-                "version" to rootProject.version,
-            )
+            expand("version" to project.version)
         }
     }
 
@@ -90,11 +88,11 @@ tasks {
 
     runServer {
         minecraftVersion(version)
-        runDirectory = rootDir.resolve("run/paper/$version")
+        runDirectory.set(rootDir.resolve("run/paper/$version"))
 
-        javaLauncher = project.javaToolchains.launcherFor {
-            languageVersion = javaVersion
-        }
+        javaLauncher.set(project.javaToolchains.launcherFor {
+            languageVersion.set(javaVersion)
+        })
 
         downloadPlugins {
             url("https://github.com/SkriptLang/Skript/releases/download/2.9.4/Skript-2.9.4.jar")
