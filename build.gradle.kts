@@ -46,7 +46,7 @@ tasks {
             attributes["Implementation-Version"] = project.version
         }
 
-        configurations = listOf(project.configurations.implementation.get())
+        configurations = listOf(project.configurations.runtimeClasspath.get())
         minimize()
         relocate("team.unnamed.creative", "me.asleepp.skriptnexo.shadow.team.unnamed.creative")
     }
