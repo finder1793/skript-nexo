@@ -12,7 +12,7 @@ paper-api = { module = "io.papermc.paper:paper-api", version.ref = "paper-api" }
 lombok = { group = "org.projectlombok", name = "lombok", version.ref = "lombok" }
 skript = { group = "com.github.SkriptLang", name = "Skript", version.ref = "skript" }
 nexo = { group = "com.nexomc", name = "nexo", version.ref = "nexo"}
-creative = { group = "team.unnamed", name = "creative" version.ref ="creative" }
+creative = { group = "team.unnamed", name = "creative" version.ref = "creative" }
 
 [plugins]
 run-paper = { id = "xyz.jpenilla.run-paper", version.ref = "run-paper" }
