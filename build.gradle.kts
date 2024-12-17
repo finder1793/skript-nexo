@@ -33,7 +33,6 @@ dependencies {
     annotationProcessor(libs.lombok)
 }
 
-
 tasks {
     jar {
         enabled = false
@@ -47,8 +46,9 @@ tasks {
             attributes["Implementation-Version"] = rootProject.version
         }
 
-        configurations = listOf(project.configurations.shadow.get())
+        configurations = listOf(project.configurations.implementation.get())
         minimize()
+        relocate 'team.unnamed.creative', 'me.asleepp.skriptnexo.shadow.team.unnamed.creative'
     }
 
     assemble {
@@ -60,7 +60,7 @@ tasks {
         options.release = 17
     }
 
-    withType<Javadoc>() {
+    withType<Javadoc> {
         options.encoding = Charsets.UTF_8.name()
     }
 
@@ -98,7 +98,7 @@ tasks {
 
         downloadPlugins {
             url("https://github.com/SkriptLang/Skript/releases/download/2.9.4/Skript-2.9.4.jar")
-            // Add your own plugins to download here, stick any that you cant download into the run folder this generates.
+            // Add your own plugins to download here, stick any that you can't download into the run folder this generates.
         }
 
         jvmArgs = jvmArgsExternal
