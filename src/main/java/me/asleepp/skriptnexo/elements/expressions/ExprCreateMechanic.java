@@ -29,10 +29,9 @@ public class ExprCreateMechanic extends SimpleExpression<Mechanic> {
 
     private Expression<String> mechanicIdExpr;
     private Expression<ConfigurationSection> configSectionExpr;
-    private final MechanicsManager mechanicsManager;
 
-    public ExprCreateMechanic(MechanicsManager mechanicsManager) {
-        this.mechanicsManager = mechanicsManager;
+    public ExprCreateMechanic() {
+        // No-argument constructor
     }
 
     @Override
@@ -50,7 +49,7 @@ public class ExprCreateMechanic extends SimpleExpression<Mechanic> {
             return null;
         }
 
-        MechanicFactory factory = mechanicsManager.getMechanicFactory(mechanicId);
+        MechanicFactory factory = MechanicsManager.INSTANCE.getMechanicFactory(mechanicId); // Access MechanicsManager directly
         if (factory == null) {
             return null;
         }
