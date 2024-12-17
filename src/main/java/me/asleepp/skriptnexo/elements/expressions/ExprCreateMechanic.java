@@ -7,6 +7,7 @@ import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
 import ch.njol.skript.lang.Expression;
+import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
@@ -23,7 +24,7 @@ import org.bukkit.event.Event;
 public class ExprCreateMechanic extends SimpleExpression<Mechanic> {
 
     static {
-        Skript.registerExpression(ExprCreateMechanic.class, Mechanic.class, ExpressionType.SIMPLE, "create mechanic with id %string% and configuration %configurationsection%");
+        Skript.registerExpression(ExprCreateMechanic.class, Mechanic.class, ch.njol.skript.lang.ExpressionType.SIMPLE, "create mechanic with id %string% and configuration %configurationsection%");
     }
 
     private Expression<String> mechanicIdExpr;
@@ -39,12 +40,13 @@ public class ExprCreateMechanic extends SimpleExpression<Mechanic> {
     @Override
     protected Mechanic[] get(Event e) {
         String mechanicId = mechanicIdExpr.getSingle(e);
-        ConfigurationSection configSection = configSection = configSectionExpr.getSingle(e);
+        ConfigurationSection configSection = configSectionExpr.getSingle(e);
         if (mechanicId == null || configSection == null) {
             return null;
         }
 
-        MechanicFactory factory = MechanicsManager.getMechanicFactory(mechanicId);
+        MechanicsManager mechanicsManager = new MechanicsManager(); // Create an instance of MechanicsManager
+        MechanicFactory factory = mechanicsManager.getMechanicFactory(mechanicId);
         if (factory == null) {
             return null;
         }
