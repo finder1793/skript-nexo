@@ -13,6 +13,7 @@ import ch.njol.skript.util.Getter;
 import com.nexomc.nexo.api.events.resourcepack.NexoPostPackGenerateEvent;
 import org.bukkit.event.Event;
 
+import javax.annotation.Nullable;
 @Name("On Pack Generation Complete")
 @Description({"Fires when the resource pack generation is complete."})
 @Examples({"on pack generation complete:"})
