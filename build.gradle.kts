@@ -31,7 +31,7 @@ dependencies {
     compileOnly(libs.skript)
     implementation(libs.creative)
     annotationProcessor(libs.lombok)
-
+}
 
 
 tasks {
