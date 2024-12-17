@@ -1,4 +1,4 @@
-package com.nexomc.nexo.api.events.resourcepack;
+package me.asleepp.skriptnexo.elements.events;
 
 import com.nexomc.nexo.api.NexoPack;
 import com.nexomc.nexo.pack.creative.NexoPackReader;
