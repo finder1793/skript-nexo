@@ -24,11 +24,16 @@ import ch.njol.skript.lang.ExpressionType;
 public class ExprCreateMechanic extends SimpleExpression<Mechanic> {
 
     static {
-        Skript.registerExpression(ExprCreateMechanic.class, Mechanic.class, ch.njol.skript.lang.ExpressionType.SIMPLE, "create mechanic with id %string% and configuration %configurationsection%");
+        Skript.registerExpression(ExprCreateMechanic.class, Mechanic.class, ExpressionType.SIMPLE, "create mechanic with id %string% and configuration %configurationsection%");
     }
 
     private Expression<String> mechanicIdExpr;
     private Expression<ConfigurationSection> configSectionExpr;
+    private final MechanicsManager mechanicsManager;
+
+    public ExprCreateMechanic(MechanicsManager mechanicsManager) {
+        this.mechanicsManager = mechanicsManager;
+    }
 
     @Override
     public boolean init(Expression<?>[] exprs, int matchedPattern, Kleenean isDelayed, SkriptParser.ParseResult parseResult) {
@@ -45,7 +50,7 @@ public class ExprCreateMechanic extends SimpleExpression<Mechanic> {
             return null;
         }
 
-        MechanicFactory factory = MechanicsManager.getMechanicFactory(mechanicId);
+        MechanicFactory factory = mechanicsManager.getMechanicFactory(mechanicId);
         if (factory == null) {
             return null;
         }
