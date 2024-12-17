@@ -29,8 +29,9 @@ dependencies {
     compileOnly(libs.lombok)
     compileOnly(libs.nexo)
     compileOnly(libs.skript)
+    implementation(libs.creative)
     annotationProcessor(libs.lombok)
-}
+
 
 
 tasks {
