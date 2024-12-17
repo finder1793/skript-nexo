@@ -7,7 +7,6 @@ import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
 import ch.njol.skript.lang.Expression;
-import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
@@ -16,6 +15,7 @@ import com.nexomc.nexo.mechanics.MechanicFactory;
 import com.nexomc.nexo.mechanics.MechanicsManager;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.Event;
+import ch.njol.skript.lang.ExpressionType;
 
 @Name("Create Mechanic")
 @Description("Creates a new mechanic with the specified configuration.")
@@ -45,8 +45,7 @@ public class ExprCreateMechanic extends SimpleExpression<Mechanic> {
             return null;
         }
 
-        MechanicsManager mechanicsManager = new MechanicsManager(); // Create an instance of MechanicsManager
-        MechanicFactory factory = mechanicsManager.getMechanicFactory(mechanicId);
+        MechanicFactory factory = MechanicsManager.getMechanicFactory(mechanicId);
         if (factory == null) {
             return null;
         }
