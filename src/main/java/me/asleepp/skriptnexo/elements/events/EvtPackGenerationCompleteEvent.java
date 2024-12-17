@@ -10,10 +10,9 @@ import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.registrations.EventValues;
 import ch.njol.skript.util.Getter;
-import com.nexomc.nexo.api.events.resourcepack.NexoPostPackGenerateEvent;
+import com.nexomc.nexo.api.events.resourcepack.NexoPackGenerationCompleteEvent;
 import org.bukkit.event.Event;
 
-import javax.annotation.Nullable;
 @Name("On Pack Generation Complete")
 @Description({"Fires when the resource pack generation is complete."})
 @Examples({"on pack generation complete:"})
@@ -21,10 +20,10 @@ import javax.annotation.Nullable;
 public class EvtPackGenerationCompleteEvent extends SkriptEvent {
 
     static {
-        Skript.registerEvent("Pack Generation Complete", EvtPackGenerationCompleteEvent.class, NexoPostPackGenerateEvent.class, "pack generation complete");
-        EventValues.registerEventValue(NexoPostPackGenerateEvent.class, ResourcePack.class, new Getter<ResourcePack, NexoPostPackGenerateEvent>() {
+        Skript.registerEvent("Pack Generation Complete", EvtPackGenerationCompleteEvent.class, NexoPackGenerationCompleteEvent.class, "pack generation complete");
+        EventValues.registerEventValue(NexoPackGenerationCompleteEvent.class, ResourcePack.class, new Getter<ResourcePack, NexoPackGenerationCompleteEvent>() {
             @Override
-            public ResourcePack get(NexoPostPackGenerateEvent event) {
+            public ResourcePack get(NexoPackGenerationCompleteEvent event) {
                 return event.getResourcePack();
             }
         }, 0);
@@ -37,7 +36,7 @@ public class EvtPackGenerationCompleteEvent extends SkriptEvent {
 
     @Override
     public boolean check(Event e) {
-        return e instanceof NexoPostPackGenerateEvent;
+        return e instanceof NexoPackGenerationCompleteEvent;
     }
 
     @Override
