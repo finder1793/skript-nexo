@@ -14,21 +14,22 @@ import com.nexomc.nexo.mechanics.Mechanic;
 import com.nexomc.nexo.mechanics.MechanicFactory;
 import com.nexomc.nexo.mechanics.MechanicsManager;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.Event;
 import ch.njol.skript.lang.ExpressionType;
 
 @Name("Create Mechanic")
 @Description("Creates a new mechanic with the specified configuration.")
-@Examples({"set {_mechanic} to create mechanic with id \"custom_mechanic\" and configuration {_config}"})
+@Examples({"set {_mechanic} to create mechanic with id \"custom_mechanic\" and configuration \"key: value\""})
 @Since("1.0")
 public class ExprCreateMechanic extends SimpleExpression<Mechanic> {
 
     static {
-        Skript.registerExpression(ExprCreateMechanic.class, Mechanic.class, ExpressionType.SIMPLE, "create mechanic with id %string% and configuration %configurationsection%");
+        Skript.registerExpression(ExprCreateMechanic.class, Mechanic.class, ExpressionType.SIMPLE, "create mechanic with id %string% and configuration %string%");
     }
 
     private Expression<String> mechanicIdExpr;
-    private Expression<ConfigurationSection> configSectionExpr;
+    private Expression<String> configExpr;
 
     public ExprCreateMechanic() {
         // No-argument constructor
@@ -37,19 +38,20 @@ public class ExprCreateMechanic extends SimpleExpression<Mechanic> {
     @Override
     public boolean init(Expression<?>[] exprs, int matchedPattern, Kleenean isDelayed, SkriptParser.ParseResult parseResult) {
         mechanicIdExpr = (Expression<String>) exprs[0];
-        configSectionExpr = (Expression<ConfigurationSection>) exprs[1];
+        configExpr = (Expression<String>) exprs[1];
         return true;
     }
 
     @Override
     protected Mechanic[] get(Event e) {
         String mechanicId = mechanicIdExpr.getSingle(e);
-        ConfigurationSection configSection = configSectionExpr.getSingle(e);
-        if (mechanicId == null || configSection == null) {
+        String configString = configExpr.getSingle(e);
+        if (mechanicId == null || configString == null) {
             return null;
         }
 
-        MechanicFactory factory = MechanicsManager.INSTANCE.getMechanicFactory(mechanicId); // Access MechanicsManager directly
+        ConfigurationSection configSection = YamlConfiguration.loadConfigurationFromString(configString);
+        MechanicFactory factory = MechanicsManager.INSTANCE.getMechanicFactory(mechanicId);
         if (factory == null) {
             return null;
         }
@@ -70,7 +72,7 @@ public class ExprCreateMechanic extends SimpleExpression<Mechanic> {
 
     @Override
     public String toString(Event e, boolean debug) {
-        return "create mechanic with id " + mechanicIdExpr.toString(e, debug) + " and configuration " + configSectionExpr.toString(e, debug);
+        return "create mechanic with id " + mechanicIdExpr.toString(e, debug) + " and configuration " + configExpr.toString(e, debug);
     }
 
     @Override
