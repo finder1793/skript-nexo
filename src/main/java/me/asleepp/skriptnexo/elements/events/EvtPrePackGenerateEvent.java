@@ -12,7 +12,7 @@ import ch.njol.skript.registrations.EventValues;
 import ch.njol.skript.util.Getter;
 import com.nexomc.nexo.api.events.resourcepack.NexoPrePackGenerateEvent;
 import org.bukkit.event.Event;
-import team.unnamed.creative.ResourcePack;
+import team.unnamed.creative-api.ResourcePack;
 
 import javax.annotation.Nullable;
 
