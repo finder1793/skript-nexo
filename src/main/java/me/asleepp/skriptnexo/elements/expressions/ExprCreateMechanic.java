@@ -18,6 +18,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.Event;
 import ch.njol.skript.lang.ExpressionType;
 
+import java.io.StringReader;
+
 @Name("Create Mechanic")
 @Description("Creates a new mechanic with the specified configuration.")
 @Examples({"set {_mechanic} to create mechanic with id \"custom_mechanic\" and configuration \"key: value\""})
@@ -50,7 +52,7 @@ public class ExprCreateMechanic extends SimpleExpression<Mechanic> {
             return null;
         }
 
-        ConfigurationSection configSection = YamlConfiguration.loadConfigurationFromString(configString);
+        ConfigurationSection configSection = loadConfigurationFromString(configString);
         MechanicFactory factory = MechanicsManager.INSTANCE.getMechanicFactory(mechanicId);
         if (factory == null) {
             return null;
@@ -58,6 +60,16 @@ public class ExprCreateMechanic extends SimpleExpression<Mechanic> {
 
         Mechanic mechanic = factory.parse(configSection);
         return mechanic != null ? new Mechanic[]{mechanic} : null;
+    }
+
+    private ConfigurationSection loadConfigurationFromString(String configString) {
+        YamlConfiguration yamlConfiguration = new YamlConfiguration();
+        try {
+            yamlConfiguration.load(new StringReader(configString));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return yamlConfiguration;
     }
 
     @Override
