@@ -12,10 +12,9 @@ import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
 import com.nexomc.nexo.api.NexoItems;
-import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.Event;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.MetadataValue;
 import ch.njol.skript.lang.ExpressionType;
 
 @Name("Get Custom Item ID from Projectile")
@@ -43,10 +42,9 @@ public class ExprGetCustomItemIDFromProjectile extends SimpleExpression<String> 
             return null;
         }
         String itemId = null;
-        if (projectile.getShooter() instanceof Player) {
-            Player shooter = (Player) projectile.getShooter();
-            ItemStack itemStack = shooter.getInventory().getItemInMainHand();
-            itemId = NexoItems.idFromItem(itemStack);
+        if (projectile.hasMetadata("nexoItemId")) {
+            MetadataValue metadataValue = projectile.getMetadata("nexoItemId").get(0);
+            itemId = metadataValue.asString();
         }
         return itemId != null ? new String[]{itemId} : null;
     }
