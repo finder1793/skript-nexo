@@ -12,35 +12,42 @@ import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
 import com.nexomc.nexo.api.NexoItems;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
 import ch.njol.skript.lang.ExpressionType;
 
-@Name("Get Custom Item ID from ItemStack")
-@Description("Gets the custom item ID from an item stack.")
-@Examples({"set {_id} to custom item ID of player's tool"})
-@Since("1.0")
-public class ExprGetCustomItemIDFromItemStack extends SimpleExpression<String> {
+@Name("Get Custom Item ID from Projectile")
+@Description("Gets the custom item ID from a projectile.")
+@Examples({"set {_id} to custom item ID of projectile"})
+@Since("1.1")
+public class ExprGetCustomItemIDFromProjectile extends SimpleExpression<String> {
 
     static {
-        Skript.registerExpression(ExprGetCustomItemIDFromItemStack.class, String.class, ExpressionType.PROPERTY, "(custom|nexo) item ID of %itemstack%");
+        Skript.registerExpression(ExprGetCustomItemIDFromProjectile.class, String.class, ExpressionType.PROPERTY, "(custom|nexo) item ID of %projectile%");
     }
 
-    private Expression<ItemStack> itemStackExpr;
+    private Expression<Projectile> projectileExpr;
 
     @Override
     public boolean init(Expression<?>[] exprs, int matchedPattern, Kleenean isDelayed, SkriptParser.ParseResult parseResult) {
-        itemStackExpr = (Expression<ItemStack>) exprs[0];
+        projectileExpr = (Expression<Projectile>) exprs[0];
         return true;
     }
 
     @Override
     protected String[] get(Event e) {
-        ItemStack itemStack = itemStackExpr.getSingle(e);
-        if (itemStack == null) {
+        Projectile projectile = projectileExpr.getSingle(e);
+        if (projectile == null) {
             return null;
         }
-        String itemId = NexoItems.idFromItem(itemStack);
+        String itemId = null;
+        if (projectile.getShooter() instanceof Player) {
+            Player shooter = (Player) projectile.getShooter();
+            ItemStack itemStack = shooter.getInventory().getItemInMainHand();
+            itemId = NexoItems.idFromItem(itemStack);
+        }
         return itemId != null ? new String[]{itemId} : null;
     }
 
@@ -56,7 +63,7 @@ public class ExprGetCustomItemIDFromItemStack extends SimpleExpression<String> {
 
     @Override
     public String toString(Event e, boolean debug) {
-        return "custom item ID of " + itemStackExpr.toString(e, debug);
+        return "custom item ID of " + projectileExpr.toString(e, debug);
     }
 
     @Override
