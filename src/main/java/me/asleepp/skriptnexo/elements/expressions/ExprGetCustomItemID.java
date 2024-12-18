@@ -10,6 +10,7 @@ import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
 import com.nexomc.nexo.api.NexoItems;
+import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
@@ -43,8 +44,12 @@ public class ExprGetCustomItemID extends SimpleExpression<String> {
         if (item instanceof ItemStack) {
             itemId = NexoItems.idFromItem((ItemStack) item);
         } else if (item instanceof Projectile) {
-            ItemStack itemStack = ((Projectile) item).getItem();
-            itemId = NexoItems.idFromItem(itemStack);
+            Projectile projectile = (Projectile) item;
+            if (projectile.getShooter() instanceof Player) {
+                Player shooter = (Player) projectile.getShooter();
+                ItemStack itemStack = shooter.getInventory().getItemInMainHand();
+                itemId = NexoItems.idFromItem(itemStack);
+            }
         }
         return itemId != null ? new String[]{itemId} : null;
     }
