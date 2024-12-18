@@ -23,4 +23,8 @@ public class SkriptMechanicFactory extends MechanicFactory {
     public void setProperty(String key, Object value) {
         properties.put(key, value);
     }
+
+    public Object getProperty(String key) {
+        return properties.get(key);
+    }
 }
