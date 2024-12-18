@@ -22,7 +22,7 @@ import java.io.StringReader;
 
 @Name("Create Mechanic")
 @Description("Creates a new mechanic with the specified configuration.")
-@Examples({"set {_mechanic} to create mechanic with id \"custom_mechanic\" and configuration \"key: value\""})
+@Examples({"set {_mechanic} to create mechanic with id \"custom_mechanic\" and configuration \"enabled: true\""})
 @Since("1.0")
 public class ExprCreateMechanic extends SimpleExpression<Mechanic> {
 
@@ -91,4 +91,3 @@ public class ExprCreateMechanic extends SimpleExpression<Mechanic> {
     public Class<?>[] acceptChange(Changer.ChangeMode mode) {
         return null;
     }
-}
