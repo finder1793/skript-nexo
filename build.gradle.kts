@@ -5,6 +5,7 @@ plugins {
     `maven-publish`
     alias(libs.plugins.shadow)
     alias(libs.plugins.run.paper)
+    kotlin("jvm")
 }
 
 repositories {
@@ -31,6 +32,7 @@ dependencies {
     compileOnly(libs.skript)
     implementation(libs.creative)
     annotationProcessor(libs.lombok)
+    implementation(kotlin("stdlib-jdk8"))
 }
 
 tasks {

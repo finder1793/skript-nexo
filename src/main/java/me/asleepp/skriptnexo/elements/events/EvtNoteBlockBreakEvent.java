@@ -10,15 +10,17 @@ import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.registrations.EventValues;
 import ch.njol.skript.util.Getter;
-import com.nexomc.nexo.api.events.furniture.NexoFurnitureDamageEvent;
 import com.nexomc.nexo.api.events.custom_block.noteblock.NexoNoteBlockBreakEvent;
-import com.nexomc.nexo.api.events.custom_block.stringblock.NexoStringBlockBreakEvent;
-import com.nexomc.nexo.api.events.custom_block.stringblock.NexoStringBlockPlaceEvent;
+import me.asleepp.skriptnexo.SkriptNexo;
+import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
 import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.Map;
+
 @Name("On Custom Note Block Break")
 @Description({"Fires when a Nexo note block gets broken."})
 @Examples({"on break of custom note block:"})
@@ -26,6 +28,7 @@ import javax.annotation.Nullable;
 public class EvtNoteBlockBreakEvent extends SkriptEvent {
 
     private Literal<String> noteBlockID;
+    private final Map<Player, Long> lastEventTimestamps = new HashMap<>();
 
     static {
         Skript.registerEvent("Custom Note Block Break", EvtNoteBlockBreakEvent.class, NexoNoteBlockBreakEvent.class, "break of (custom|Nexo) (music|note) block [%string%]");
@@ -53,6 +56,23 @@ public class EvtNoteBlockBreakEvent extends SkriptEvent {
     public boolean check(Event e) {
         if (e instanceof NexoNoteBlockBreakEvent) {
             NexoNoteBlockBreakEvent event = (NexoNoteBlockBreakEvent) e;
+
+            if (!SkriptNexo.getInstance().getConfiguration().isEventEnabled("noteblock", "break")) {
+                return false;
+            }
+
+            Player player = event.getPlayer();
+            long currentTick = Bukkit.getCurrentTick();
+            Long lastProcessedTick = lastEventTimestamps.get(player);
+
+            int configCooldown = SkriptNexo.getInstance().getConfiguration().getEventCooldown("noteblock", "break");
+
+            if (lastProcessedTick != null && (currentTick - lastProcessedTick) < configCooldown) {
+                return false;
+            }
+
+            lastEventTimestamps.put(player, currentTick);
+
             if (noteBlockID == null) {
                 return !event.isCancelled();
             } else {
@@ -64,7 +84,6 @@ public class EvtNoteBlockBreakEvent extends SkriptEvent {
         }
         return false;
     }
-
 
     @Override
     public String toString(@Nullable Event e, boolean debug) {

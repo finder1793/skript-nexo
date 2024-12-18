@@ -10,16 +10,18 @@ import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.registrations.EventValues;
 import ch.njol.skript.util.Getter;
-import com.nexomc.nexo.api.events.custom_block.noteblock.NexoNoteBlockInteractEvent;
-import com.nexomc.nexo.api.events.custom_block.stringblock.NexoStringBlockBreakEvent;
 import com.nexomc.nexo.api.events.custom_block.stringblock.NexoStringBlockInteractEvent;
-import com.nexomc.nexo.utils.drops.Drop;
+import me.asleepp.skriptnexo.SkriptNexo;
+import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
 import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.Map;
+
 @Name("On Custom String Block Interact")
 @Description({"Fires when a Nexo string block gets interacted with."})
 @Examples({"on interact with custom string block:"})
@@ -27,6 +29,7 @@ import javax.annotation.Nullable;
 public class EvtStringBlockInteractEvent extends SkriptEvent {
 
     private Literal<String> stringBlockID;
+    private final Map<Player, Long> lastEventTimestamps = new HashMap<>();
 
     static {
         Skript.registerEvent("String Block Interact", EvtStringBlockInteractEvent.class, NexoStringBlockInteractEvent.class, "interact with (custom|Nexo) string block [%string%]");
@@ -48,8 +51,8 @@ public class EvtStringBlockInteractEvent extends SkriptEvent {
                 return arg.getBlockFace();
             }
         }, 0);
+    }
 
-    }    
     @Override
     public boolean init(Literal<?>[] args, int matchedPattern, SkriptParser.ParseResult parseResult) {
         stringBlockID = (Literal<String>) args[0];
@@ -60,6 +63,23 @@ public class EvtStringBlockInteractEvent extends SkriptEvent {
     public boolean check(Event e) {
         if (e instanceof NexoStringBlockInteractEvent) {
             NexoStringBlockInteractEvent event = (NexoStringBlockInteractEvent) e;
+
+            if (!SkriptNexo.getInstance().getConfiguration().isEventEnabled("stringblock", "interact")) {
+                return false;
+            }
+
+            Player player = event.getPlayer();
+            long currentTick = Bukkit.getCurrentTick();
+            Long lastProcessedTick = lastEventTimestamps.get(player);
+
+            int configCooldown = SkriptNexo.getInstance().getConfiguration().getEventCooldown("stringblock", "interact");
+
+            if (lastProcessedTick != null && (currentTick - lastProcessedTick) < configCooldown) {
+                return false;
+            }
+
+            lastEventTimestamps.put(player, currentTick);
+
             if (stringBlockID == null) {
                 return !event.isCancelled();
             } else {
@@ -71,7 +91,6 @@ public class EvtStringBlockInteractEvent extends SkriptEvent {
         }
         return false;
     }
-
 
     @Override
     public String toString(@Nullable Event e, boolean debug) {

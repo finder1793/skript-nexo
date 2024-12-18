@@ -14,11 +14,16 @@ import com.nexomc.nexo.api.events.custom_block.noteblock.NexoNoteBlockInteractEv
 import com.nexomc.nexo.api.events.custom_block.stringblock.NexoStringBlockBreakEvent;
 import com.nexomc.nexo.api.events.custom_block.stringblock.NexoStringBlockInteractEvent;
 import com.nexomc.nexo.utils.drops.Drop;
+import me.asleepp.skriptnexo.SkriptNexo;
+import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
 import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.Map;
+
 @Name("On Custom String Block Break")
 @Description({"Fires when a Nexo string block gets broken."})
 @Examples({"on break of custom string block:"})
@@ -26,6 +31,7 @@ import javax.annotation.Nullable;
 public class EvtStringBlockBreakEvent extends SkriptEvent {
 
     private Literal<String> stringBlockID;
+    private final Map<Player, Long> lastEventTimestamps = new HashMap<>();
 
     static {
         Skript.registerEvent("String Block Break", EvtStringBlockBreakEvent.class, NexoStringBlockBreakEvent.class, "break of (custom|Nexo) string block [%string%]");
@@ -59,6 +65,23 @@ public class EvtStringBlockBreakEvent extends SkriptEvent {
     public boolean check(Event e) {
         if (e instanceof NexoStringBlockBreakEvent) {
             NexoStringBlockBreakEvent event = (NexoStringBlockBreakEvent) e;
+
+            if (!SkriptNexo.getInstance().getConfiguration().isEventEnabled("stringblock", "break")) {
+                return false;
+            }
+
+            Player player = event.getPlayer();
+            long currentTick = Bukkit.getCurrentTick();
+            Long lastProcessedTick = lastEventTimestamps.get(player);
+
+            int configCooldown = SkriptNexo.getInstance().getConfiguration().getEventCooldown("stringblock", "break");
+
+            if (lastProcessedTick != null && (currentTick - lastProcessedTick) < configCooldown) {
+                return false;
+            }
+
+            lastEventTimestamps.put(player, currentTick);
+
             if (stringBlockID == null) {
                 return !event.isCancelled();
             } else {

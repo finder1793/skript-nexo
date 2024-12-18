@@ -11,12 +11,17 @@ import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.registrations.EventValues;
 import ch.njol.skript.util.Getter;
 import com.nexomc.nexo.api.events.custom_block.stringblock.NexoStringBlockPlaceEvent;
+import me.asleepp.skriptnexo.SkriptNexo;
+import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.Map;
+
 @Name("On Custom String Block Place")
 @Description({"Fires when a Nexo string block gets placed."})
 @Examples({"on place of custom string block:"})
@@ -24,6 +29,7 @@ import javax.annotation.Nullable;
 public class EvtStringBlockPlaceEvent extends SkriptEvent {
 
     private Literal<String> stringBlockID;
+    private final Map<Player, Long> lastEventTimestamps = new HashMap<>();
 
     static {
         Skript.registerEvent("String Block Place", EvtStringBlockPlaceEvent.class, NexoStringBlockPlaceEvent.class, "place of (custom|Nexo) string block [%string%]");
@@ -57,6 +63,23 @@ public class EvtStringBlockPlaceEvent extends SkriptEvent {
     public boolean check(Event e) {
         if (e instanceof NexoStringBlockPlaceEvent) {
             NexoStringBlockPlaceEvent event = (NexoStringBlockPlaceEvent) e;
+
+            if (!SkriptNexo.getInstance().getConfiguration().isEventEnabled("stringblock", "place")) {
+                return false;
+            }
+
+            Player player = event.getPlayer();
+            long currentTick = Bukkit.getCurrentTick();
+            Long lastProcessedTick = lastEventTimestamps.get(player);
+
+            int configCooldown = SkriptNexo.getInstance().getConfiguration().getEventCooldown("stringblock", "place");
+
+            if (lastProcessedTick != null && (currentTick - lastProcessedTick) < configCooldown) {
+                return false;
+            }
+
+            lastEventTimestamps.put(player, currentTick);
+
             if (stringBlockID == null) {
                 return !event.isCancelled();
             } else {

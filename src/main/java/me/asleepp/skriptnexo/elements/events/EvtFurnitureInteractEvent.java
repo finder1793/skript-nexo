@@ -11,6 +11,7 @@ import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.registrations.EventValues;
 import ch.njol.skript.util.Getter;
 import com.nexomc.nexo.api.events.furniture.NexoFurnitureInteractEvent;
+import me.asleepp.skriptnexo.SkriptNexo;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
@@ -30,7 +31,6 @@ import java.util.Map;
 public class EvtFurnitureInteractEvent extends SkriptEvent {
     private Literal<String> furnitureID;
     private final Map<Player, Long> lastEventTimestamps = new HashMap<>();
-    private static final int TICK_LIMIT = 2; // Number of ticks to limit the event
 
     static {
         Skript.registerEvent("Furniture interact", EvtFurnitureInteractEvent.class, NexoFurnitureInteractEvent.class, "interact with (custom|Nexo) furniture [%string%]");
@@ -78,12 +78,20 @@ public class EvtFurnitureInteractEvent extends SkriptEvent {
     public boolean check(Event e) {
         if (e instanceof NexoFurnitureInteractEvent) {
             NexoFurnitureInteractEvent event = (NexoFurnitureInteractEvent) e;
+
+            // Check if event is enabled in config
+            if (!SkriptNexo.getInstance().getConfiguration().isEventEnabled("furniture", "interact")) {
+                return false;
+            }
+
             Player player = event.getPlayer();
             long currentTick = Bukkit.getCurrentTick();
             Long lastProcessedTick = lastEventTimestamps.get(player);
 
-            if (lastProcessedTick != null && (currentTick - lastProcessedTick) < TICK_LIMIT) {
-                return false; // Ignore the event if it was processed within the tick limit
+            int configCooldown = SkriptNexo.getInstance().getConfiguration().getEventCooldown("furniture", "interact");
+
+            if (lastProcessedTick != null && (currentTick - lastProcessedTick) < configCooldown) {
+                return false;
             }
 
             lastEventTimestamps.put(player, currentTick);

@@ -2,9 +2,9 @@ package me.asleepp.skriptnexo;
 
 import java.io.IOException;
 
-
 import ch.njol.skript.bstats.bukkit.Metrics;
 import ch.njol.skript.util.Version;
+import me.asleepp.skriptnexo.config.SkriptNexoConfig;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -17,16 +17,21 @@ import javax.annotation.Nullable;
 public class SkriptNexo extends JavaPlugin {
 
     private static SkriptAddon addon;
-
     private static SkriptNexo instance;
+    private SkriptNexoConfig configuration;
 
     @Nullable
     public static SkriptNexo getInstance() {
         return instance;
     }
+
     @Nullable
     public static SkriptAddon getAddonInstance() {
         return addon;
+    }
+
+    public SkriptNexoConfig getConfiguration() {
+        return configuration;
     }
 
     @Override
@@ -56,9 +61,13 @@ public class SkriptNexo extends JavaPlugin {
             manager.disablePlugin(this);
             return;
         }
+
+        instance = this;
+        configuration = new SkriptNexoConfig(this);
+
         int pluginId = 21274; // todo replace this with new bstats id
         Metrics metrics = new Metrics(this, pluginId);
-        instance = this;
+
         addon = Skript.registerAddon(this);
         addon.setLanguageFileDirectory("lang");
         try {
@@ -70,8 +79,5 @@ public class SkriptNexo extends JavaPlugin {
         }
         long finish = System.currentTimeMillis() - start;
         getLogger().info("Succesfully loaded skript-nexo in " + finish + "ms!");
-
     }
-
-
 }

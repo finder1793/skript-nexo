@@ -1,0 +1,39 @@
+# Skript-Nexo Configuration
+
+events:
+  furniture:
+    interact:
+      enabled: true
+      cooldown: 1
+    break:
+      enabled: true
+      cooldown: 2
+
+  stringblock:
+    break:
+      enabled: true
+      cooldown: 1
+    damage:
+      enabled: true
+      cooldown: 1
+    interact:
+      enabled: true
+      cooldown: 1
+    place:
+      enabled: true
+      cooldown: 1
+
+  noteblock:
+    break:
+      enabled: true
+      cooldown: 1
+    interact:
+      enabled: true
+      cooldown: 1
+    place:
+      enabled: true
+      cooldown: 1
+
+settings:
+  debug-mode: false
+  cache-size: 100

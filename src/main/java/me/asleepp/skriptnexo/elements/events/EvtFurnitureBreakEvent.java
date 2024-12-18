@@ -11,12 +11,15 @@ import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.registrations.EventValues;
 import ch.njol.skript.util.Getter;
 import com.nexomc.nexo.api.events.furniture.NexoFurnitureBreakEvent;
-import com.nexomc.nexo.api.events.custom_block.stringblock.NexoStringBlockPlaceEvent;
+import me.asleepp.skriptnexo.SkriptNexo;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.Location;
+import org.bukkit.Bukkit;
 
 import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.Map;
 
 @Name("On Custom Furniture Break")
 @Description({"Fires when an Nexo furniture gets broken."})
@@ -24,6 +27,7 @@ import javax.annotation.Nullable;
 @Since("1.0")
 public class EvtFurnitureBreakEvent extends SkriptEvent {
     private Literal<String> furnitureID;
+    private final Map<Player, Long> lastEventTimestamps = new HashMap<>();
 
     static {
         Skript.registerEvent("Furniture Break", EvtFurnitureBreakEvent.class, NexoFurnitureBreakEvent.class, "break of (custom|Nexo) furniture [%string%]");
@@ -51,6 +55,24 @@ public class EvtFurnitureBreakEvent extends SkriptEvent {
     public boolean check(Event e) {
         if (e instanceof NexoFurnitureBreakEvent) {
             NexoFurnitureBreakEvent event = (NexoFurnitureBreakEvent) e;
+
+            // Check if event is enabled in config
+            if (!SkriptNexo.getInstance().getConfiguration().isEventEnabled("furniture", "break")) {
+                return false;
+            }
+
+            Player player = event.getPlayer();
+            long currentTick = Bukkit.getCurrentTick();
+            Long lastProcessedTick = lastEventTimestamps.get(player);
+
+            int configCooldown = SkriptNexo.getInstance().getConfiguration().getEventCooldown("furniture", "break");
+
+            if (lastProcessedTick != null && (currentTick - lastProcessedTick) < configCooldown) {
+                return false;
+            }
+
+            lastEventTimestamps.put(player, currentTick);
+
             if (furnitureID == null) {
                 return !event.isCancelled();
             } else {

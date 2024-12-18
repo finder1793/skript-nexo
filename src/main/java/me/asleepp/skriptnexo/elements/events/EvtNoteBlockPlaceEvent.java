@@ -10,13 +10,17 @@ import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.registrations.EventValues;
 import ch.njol.skript.util.Getter;
-import com.nexomc.nexo.api.events.custom_block.noteblock.NexoNoteBlockBreakEvent;
 import com.nexomc.nexo.api.events.custom_block.noteblock.NexoNoteBlockPlaceEvent;
+import me.asleepp.skriptnexo.SkriptNexo;
+import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
 import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.Map;
+
 @Name("On Custom Note Block Place")
 @Description({"Fires when a Nexo note block gets placed."})
 @Examples({"on place of custom note block:"})
@@ -24,6 +28,7 @@ import javax.annotation.Nullable;
 public class EvtNoteBlockPlaceEvent extends SkriptEvent {
 
     private Literal<String> noteBlockID;
+    private final Map<Player, Long> lastEventTimestamps = new HashMap<>();
 
     static {
         Skript.registerEvent("Custom Note Block Place", EvtNoteBlockPlaceEvent.class, NexoNoteBlockPlaceEvent.class, "place of (custom|Nexo) (music|note) block [%string%]");
@@ -40,6 +45,7 @@ public class EvtNoteBlockPlaceEvent extends SkriptEvent {
             }
         }, 0);
     }
+
     @Override
     public boolean init(Literal<?>[] args, int matchedPattern, SkriptParser.ParseResult parseResult) {
         noteBlockID = (Literal<String>) args[0];
@@ -50,6 +56,23 @@ public class EvtNoteBlockPlaceEvent extends SkriptEvent {
     public boolean check(Event e) {
         if (e instanceof NexoNoteBlockPlaceEvent) {
             NexoNoteBlockPlaceEvent event = (NexoNoteBlockPlaceEvent) e;
+
+            if (!SkriptNexo.getInstance().getConfiguration().isEventEnabled("noteblock", "place")) {
+                return false;
+            }
+
+            Player player = event.getPlayer();
+            long currentTick = Bukkit.getCurrentTick();
+            Long lastProcessedTick = lastEventTimestamps.get(player);
+
+            int configCooldown = SkriptNexo.getInstance().getConfiguration().getEventCooldown("noteblock", "place");
+
+            if (lastProcessedTick != null && (currentTick - lastProcessedTick) < configCooldown) {
+                return false;
+            }
+
+            lastEventTimestamps.put(player, currentTick);
+
             if (noteBlockID == null) {
                 return !event.isCancelled();
             } else {
