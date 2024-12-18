@@ -16,6 +16,8 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.event.Event;
 import org.bukkit.metadata.MetadataValue;
 import ch.njol.skript.lang.ExpressionType;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.entity.ThrowableProjectile;
 
 @Name("Get Custom Item ID from Projectile")
 @Description("Gets the custom item ID from a projectile.")
@@ -24,7 +26,9 @@ import ch.njol.skript.lang.ExpressionType;
 public class ExprGetCustomItemIDFromProjectile extends SimpleExpression<String> {
 
     static {
-        Skript.registerExpression(ExprGetCustomItemIDFromProjectile.class, String.class, ExpressionType.PROPERTY, "(custom|nexo) item ID of %projectile%");
+        Skript.registerExpression(ExprGetCustomItemIDFromProjectile.class, String.class, ExpressionType.PROPERTY, 
+            "(custom|nexo) item ID of %projectile%",
+            "%projectile%'s (custom|nexo) item ID");
     }
 
     private Expression<Projectile> projectileExpr;
@@ -41,12 +45,25 @@ public class ExprGetCustomItemIDFromProjectile extends SimpleExpression<String> 
         if (projectile == null) {
             return null;
         }
-        String itemId = null;
-        if (projectile.hasMetadata("nexoItemId")) {
-            MetadataValue metadataValue = projectile.getMetadata("itemId").get(0);
-            itemId = metadataValue.asString();
+        
+        // Handle ThrowableProjectile items
+        if (projectile instanceof ThrowableProjectile) {
+            ItemStack item = ((ThrowableProjectile) projectile).getItem();
+            if (item != null && NexoItems.isNexoItem(item)) {
+                return new String[]{NexoItems.getItemId(item)};
+            }
         }
-        return itemId != null ? new String[]{itemId} : null;
+        
+        // Fallback to metadata check
+        if (projectile.hasMetadata("nexoItemId")) {
+            for (MetadataValue value : projectile.getMetadata("nexoItemId")) {
+                if (value != null) {
+                    return new String[]{value.asString()};
+                }
+            }
+        }
+        
+        return null;
     }
 
     @Override
