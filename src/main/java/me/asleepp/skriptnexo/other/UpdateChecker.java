@@ -15,7 +15,6 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.concurrent.CompletableFuture;
 
-// todo replace urls with skript-nexo when github updates (i assume it will)
 public class UpdateChecker implements Listener {
 
     private final SkriptNexo plugin;
