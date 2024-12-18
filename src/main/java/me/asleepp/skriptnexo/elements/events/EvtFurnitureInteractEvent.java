@@ -69,8 +69,12 @@ public class EvtFurnitureInteractEvent extends SkriptEvent {
 
     @Override
     public boolean init(Literal<?>[] args, int matchedPattern, SkriptParser.ParseResult parseResult) {
-        furnitureID = (Literal<String>) args[0];
-        cancelBlockPlace = (Literal<Boolean>) args[1];
+        if (args.length > 0) {
+            furnitureID = (Literal<String>) args[0];
+        }
+        if (args.length > 1) {
+            cancelBlockPlace = (Literal<Boolean>) args[1];
+        }
         return true;
     }
 
