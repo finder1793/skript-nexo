@@ -18,7 +18,6 @@ import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.Material;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
