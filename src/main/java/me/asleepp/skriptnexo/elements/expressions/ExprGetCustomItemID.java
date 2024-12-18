@@ -23,7 +23,7 @@ import ch.njol.skript.lang.ExpressionType;
 public class ExprGetCustomItemIDFromItemStack extends SimpleExpression<String> {
 
     static {
-        Skript.registerExpression(ExprGetCustomItemIDFromItemStack.class, String.class, ExpressionType.PROPERTY, "(custom|nexo) item ID of %itemstack%");
+        Skript.registerExpression(ExprGetCustomItemID.class, String.class, ExpressionType.PROPERTY, "(custom|nexo) item ID of %itemstack%");
     }
 
     private Expression<ItemStack> itemStackExpr;
