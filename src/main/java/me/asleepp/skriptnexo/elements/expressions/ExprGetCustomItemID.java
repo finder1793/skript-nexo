@@ -20,7 +20,7 @@ import ch.njol.skript.lang.ExpressionType;
 @Description("Gets the custom item ID from an item stack.")
 @Examples({"set {_id} to custom item ID of player's tool"})
 @Since("1.0")
-public class ExprGetCustomItemIDFromItemStack extends SimpleExpression<String> {
+public class ExprGetCustomItemID extends SimpleExpression<String> {
 
     static {
         Skript.registerExpression(ExprGetCustomItemID.class, String.class, ExpressionType.PROPERTY, "(custom|nexo) item ID of %itemstack%");
