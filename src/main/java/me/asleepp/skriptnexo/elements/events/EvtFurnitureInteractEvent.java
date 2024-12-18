@@ -25,16 +25,15 @@ import java.util.Map;
 
 @Name("On Custom Furniture Interact")
 @Description({"Fires when an Nexo furniture gets interacted with."})
-@Examples({"on interact with (custom|nexo) furniture [cancel if holding block]:"})
+@Examples({"on interact with (custom|nexo) furniture:"})
 @Since("1.0")
 public class EvtFurnitureInteractEvent extends SkriptEvent {
     private Literal<String> furnitureID;
-    private Literal<Boolean> cancelBlockPlace;
     private final Map<Player, Long> lastEventTimestamps = new HashMap<>();
     private static final int TICK_LIMIT = 2; // Number of ticks to limit the event
 
     static {
-        Skript.registerEvent("Furniture interact", EvtFurnitureInteractEvent.class, NexoFurnitureInteractEvent.class, "interact with (custom|Nexo) furniture [%string%] [cancel if holding block]");
+        Skript.registerEvent("Furniture interact", EvtFurnitureInteractEvent.class, NexoFurnitureInteractEvent.class, "interact with (custom|Nexo) furniture [%string%]");
         EventValues.registerEventValue(NexoFurnitureInteractEvent.class, Player.class, new Getter<Player, NexoFurnitureInteractEvent>() {
             @Override
             public Player get(NexoFurnitureInteractEvent arg) {
@@ -72,9 +71,6 @@ public class EvtFurnitureInteractEvent extends SkriptEvent {
         if (args.length > 0) {
             furnitureID = (Literal<String>) args[0];
         }
-        if (args.length > 1) {
-            cancelBlockPlace = (Literal<Boolean>) args[1];
-        }
         return true;
     }
 
@@ -92,15 +88,6 @@ public class EvtFurnitureInteractEvent extends SkriptEvent {
 
             lastEventTimestamps.put(player, currentTick);
 
-            // Check if the optional parameter is set to true
-            if (cancelBlockPlace != null && cancelBlockPlace.getSingle() != null && cancelBlockPlace.getSingle()) {
-                // Check if the player has a block in hand and is not sneaking
-                ItemStack itemInHand = event.getItemInHand();
-                if (itemInHand != null && itemInHand.getType().isBlock() && !player.isSneaking()) {
-                    return false; // Cancel the event
-                }
-            }
-
             if (furnitureID == null) {
                 return !event.isCancelled();
             } else {
@@ -115,6 +102,6 @@ public class EvtFurnitureInteractEvent extends SkriptEvent {
 
     @Override
     public String toString(@Nullable Event e, boolean debug) {
-        return "custom furniture " + (furnitureID != null ? furnitureID.toString(e, debug) : "") + (cancelBlockPlace != null ? " with cancel if holding block" : "");
+        return "custom furniture " + (furnitureID != null ? furnitureID.toString(e, debug) : "");
     }
 }
