@@ -63,12 +63,18 @@ public class EvtStringBlockInteractEvent extends SkriptEvent {
     public boolean check(Event e) {
         if (e instanceof NexoStringBlockInteractEvent) {
             NexoStringBlockInteractEvent event = (NexoStringBlockInteractEvent) e;
+            Player player = event.getPlayer();
+
+            if (!player.isSneaking()) {
+                event.setCancelled(true);
+            } else {
+                return false;
+            }
 
             if (!SkriptNexo.getInstance().getConfiguration().isEventEnabled("stringblock", "interact")) {
                 return false;
             }
 
-            Player player = event.getPlayer();
             long currentTick = Bukkit.getCurrentTick();
             Long lastProcessedTick = lastEventTimestamps.get(player);
 

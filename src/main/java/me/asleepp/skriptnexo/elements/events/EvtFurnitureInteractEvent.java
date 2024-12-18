@@ -78,13 +78,20 @@ public class EvtFurnitureInteractEvent extends SkriptEvent {
     public boolean check(Event e) {
         if (e instanceof NexoFurnitureInteractEvent) {
             NexoFurnitureInteractEvent event = (NexoFurnitureInteractEvent) e;
+            Player player = event.getPlayer();
 
-            // Check if event is enabled in config
+            // If player is not sneaking, cancel block placement
+            if (!player.isSneaking()) {
+                event.setCancelled(true);
+            } else {
+                // Player is sneaking, let them place blocks
+                return false;
+            }
+
             if (!SkriptNexo.getInstance().getConfiguration().isEventEnabled("furniture", "interact")) {
                 return false;
             }
 
-            Player player = event.getPlayer();
             long currentTick = Bukkit.getCurrentTick();
             Long lastProcessedTick = lastEventTimestamps.get(player);
 

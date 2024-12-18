@@ -56,12 +56,18 @@ public class EvtNoteBlockInteractEvent extends SkriptEvent {
     public boolean check(Event e) {
         if (e instanceof NexoNoteBlockInteractEvent) {
             NexoNoteBlockInteractEvent event = (NexoNoteBlockInteractEvent) e;
+            Player player = event.getPlayer();
+
+            if (!player.isSneaking()) {
+                event.setCancelled(true);
+            } else {
+                return false;
+            }
 
             if (!SkriptNexo.getInstance().getConfiguration().isEventEnabled("noteblock", "interact")) {
                 return false;
             }
 
-            Player player = event.getPlayer();
             long currentTick = Bukkit.getCurrentTick();
             Long lastProcessedTick = lastEventTimestamps.get(player);
 
