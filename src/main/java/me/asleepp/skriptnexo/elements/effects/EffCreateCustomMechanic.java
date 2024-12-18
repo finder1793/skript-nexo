@@ -14,6 +14,7 @@ import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Since;
 import org.jetbrains.annotations.Nullable;
+import ch.njol.skript.lang.SkriptParser.ParseResult;
 import me.asleepp.skriptnexo.SkriptNexo;
 import me.asleepp.skriptnexo.mechanics.SkriptMechanicFactory;
 
