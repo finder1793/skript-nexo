@@ -38,7 +38,6 @@ public class ExprGetCustomItemIDFromProjectile extends SimpleExpression<String> 
         projectileExpr = (Expression<Projectile>) exprs[0];
         return true;
     }
-
     @Override
     protected String[] get(Event e) {
         Projectile projectile = projectileExpr.getSingle(e);
@@ -49,8 +48,11 @@ public class ExprGetCustomItemIDFromProjectile extends SimpleExpression<String> 
         // Handle ThrowableProjectile items
         if (projectile instanceof ThrowableProjectile) {
             ItemStack item = ((ThrowableProjectile) projectile).getItem();
-            if (item != null && NexoItems.isNexoItem(item)) {
-                return new String[]{NexoItems.getItemId(item)};
+            if (item != null) {
+                String nexoId = NexoItems.idFromItem(item);
+                if (NexoItems.exists(nexoId)) {
+                    return new String[]{nexoId};
+                }
             }
         }
         
@@ -65,7 +67,6 @@ public class ExprGetCustomItemIDFromProjectile extends SimpleExpression<String> 
         
         return null;
     }
-
     @Override
     public boolean isSingle() {
         return true;
