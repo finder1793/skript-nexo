@@ -43,7 +43,7 @@ public class ExprGetCustomItemIDFromProjectile extends SimpleExpression<String> 
         }
         String itemId = null;
         if (projectile.hasMetadata("nexoItemId")) {
-            MetadataValue metadataValue = projectile.getMetadata("nexoItemId").get(0);
+            MetadataValue metadataValue = projectile.getMetadata("itemId").get(0);
             itemId = metadataValue.asString();
         }
         return itemId != null ? new String[]{itemId} : null;
