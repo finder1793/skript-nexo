@@ -91,3 +91,4 @@ public class ExprCreateMechanic extends SimpleExpression<Mechanic> {
     public Class<?>[] acceptChange(Changer.ChangeMode mode) {
         return null;
     }
+}
