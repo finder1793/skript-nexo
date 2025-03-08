@@ -9,7 +9,7 @@ import ch.njol.skript.lang.Literal;
 import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.registrations.EventValues;
-import ch.njol.skript.util.Getter;
+import org.skriptlang.skript.lang.converter.Converter;
 import com.nexomc.nexo.api.events.custom_block.noteblock.NexoNoteBlockPlaceEvent;
 import me.asleepp.skriptnexo.SkriptNexo;
 import org.bukkit.Bukkit;
@@ -32,15 +32,15 @@ public class EvtNoteBlockPlaceEvent extends SkriptEvent {
 
     static {
         Skript.registerEvent("Custom Note Block Place", EvtNoteBlockPlaceEvent.class, NexoNoteBlockPlaceEvent.class, "place of (custom|Nexo) (music|note) block [%string%]");
-        EventValues.registerEventValue(NexoNoteBlockPlaceEvent.class, Player.class, new Getter<Player, NexoNoteBlockPlaceEvent>() {
+        EventValues.registerEventValue(NexoNoteBlockPlaceEvent.class, Player.class, new Converter<NexoNoteBlockPlaceEvent, Player>() {
             @Override
-            public @Nullable Player get(NexoNoteBlockPlaceEvent arg) {
+            public Player convert(NexoNoteBlockPlaceEvent arg) {
                 return arg.getPlayer();
             }
         }, 0);
-        EventValues.registerEventValue(NexoNoteBlockPlaceEvent.class, Block.class, new Getter<Block, NexoNoteBlockPlaceEvent>() {
+        EventValues.registerEventValue(NexoNoteBlockPlaceEvent.class, Block.class, new Converter<NexoNoteBlockPlaceEvent, Block>() {
             @Override
-            public Block get(NexoNoteBlockPlaceEvent arg) {
+            public Block convert(NexoNoteBlockPlaceEvent arg) {
                 return arg.getBlock();
             }
         }, 0);

@@ -9,7 +9,7 @@ import ch.njol.skript.lang.Literal;
 import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.registrations.EventValues;
-import ch.njol.skript.util.Getter;
+import org.skriptlang.skript.lang.converter.Converter;
 import com.nexomc.nexo.api.events.furniture.NexoFurnitureInteractEvent;
 import me.asleepp.skriptnexo.SkriptNexo;
 import org.bukkit.entity.Player;
@@ -34,33 +34,33 @@ public class EvtFurnitureInteractEvent extends SkriptEvent {
 
     static {
         Skript.registerEvent("Furniture interact", EvtFurnitureInteractEvent.class, NexoFurnitureInteractEvent.class, "interact with (custom|Nexo) furniture [%string%]");
-        EventValues.registerEventValue(NexoFurnitureInteractEvent.class, Player.class, new Getter<Player, NexoFurnitureInteractEvent>() {
+        EventValues.registerEventValue(NexoFurnitureInteractEvent.class, Player.class, new Converter<NexoFurnitureInteractEvent, Player>() {
             @Override
-            public Player get(NexoFurnitureInteractEvent arg) {
+            public Player convert(NexoFurnitureInteractEvent arg) {
                 return arg.getPlayer();
             }
         }, 0);
-        EventValues.registerEventValue(NexoFurnitureInteractEvent.class, ItemStack.class, new Getter<ItemStack, NexoFurnitureInteractEvent>() {
+        EventValues.registerEventValue(NexoFurnitureInteractEvent.class, ItemStack.class, new Converter<NexoFurnitureInteractEvent, ItemStack>() {
             @Override
-            public ItemStack get(NexoFurnitureInteractEvent arg) {
+            public ItemStack convert(NexoFurnitureInteractEvent arg) {
                 return arg.getItemInHand();
             }
         }, 0);
-        EventValues.registerEventValue(NexoFurnitureInteractEvent.class, Location.class, new Getter<Location, NexoFurnitureInteractEvent>() {
+        EventValues.registerEventValue(NexoFurnitureInteractEvent.class, Location.class, new Converter<NexoFurnitureInteractEvent, Location>() {
             @Override
-            public Location get(NexoFurnitureInteractEvent event) {
+            public Location convert(NexoFurnitureInteractEvent event) {
                 return event.getBaseEntity().getLocation();
             }
         }, 0);
-        EventValues.registerEventValue(NexoFurnitureInteractEvent.class, BlockFace.class, new Getter<BlockFace, NexoFurnitureInteractEvent>() {
+        EventValues.registerEventValue(NexoFurnitureInteractEvent.class, BlockFace.class, new Converter<NexoFurnitureInteractEvent, BlockFace>() {
             @Override
-            public BlockFace get(NexoFurnitureInteractEvent event) {
+            public BlockFace convert(NexoFurnitureInteractEvent event) {
                 return event.getBlockFace();
             }
         }, 0);
-        EventValues.registerEventValue(NexoFurnitureInteractEvent.class, EquipmentSlot.class, new Getter<EquipmentSlot, NexoFurnitureInteractEvent>() {
+        EventValues.registerEventValue(NexoFurnitureInteractEvent.class, EquipmentSlot.class, new Converter<NexoFurnitureInteractEvent, EquipmentSlot>() {
             @Override
-            public EquipmentSlot get(NexoFurnitureInteractEvent event) {
+            public EquipmentSlot convert(NexoFurnitureInteractEvent event) {
                 return event.getHand();
             }
         }, 0);

@@ -9,7 +9,7 @@ import ch.njol.skript.lang.Literal;
 import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.registrations.EventValues;
-import ch.njol.skript.util.Getter;
+import org.skriptlang.skript.lang.converter.Converter;
 import com.nexomc.nexo.api.events.resourcepack.NexoPackUploadEvent;
 import org.bukkit.event.Event;
 
@@ -23,15 +23,15 @@ public class EvtPackUploadEvent extends SkriptEvent {
 
     static {
         Skript.registerEvent("Pack Upload", EvtPackUploadEvent.class, NexoPackUploadEvent.class, "pack upload");
-        EventValues.registerEventValue(NexoPackUploadEvent.class, String.class, new Getter<String, NexoPackUploadEvent>() {
+        EventValues.registerEventValue(NexoPackUploadEvent.class, String.class, new Converter<NexoPackUploadEvent, String>() {
             @Override
-            public String get(NexoPackUploadEvent event) {
+            public String convert(NexoPackUploadEvent event) {
                 return event.getHash();
             }
         }, 0);
-        EventValues.registerEventValue(NexoPackUploadEvent.class, String.class, new Getter<String, NexoPackUploadEvent>() {
+        EventValues.registerEventValue(NexoPackUploadEvent.class, String.class, new Converter<NexoPackUploadEvent, String>() {
             @Override
-            public String get(NexoPackUploadEvent event) {
+            public String convert(NexoPackUploadEvent event) {
                 return event.getUrl();
             }
         }, 0);

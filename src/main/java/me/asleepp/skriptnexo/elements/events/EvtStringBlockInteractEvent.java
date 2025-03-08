@@ -9,7 +9,7 @@ import ch.njol.skript.lang.Literal;
 import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.registrations.EventValues;
-import ch.njol.skript.util.Getter;
+import org.skriptlang.skript.lang.converter.Converter;
 import com.nexomc.nexo.api.events.custom_block.stringblock.NexoStringBlockInteractEvent;
 import me.asleepp.skriptnexo.SkriptNexo;
 import org.bukkit.Bukkit;
@@ -33,21 +33,21 @@ public class EvtStringBlockInteractEvent extends SkriptEvent {
 
     static {
         Skript.registerEvent("String Block Interact", EvtStringBlockInteractEvent.class, NexoStringBlockInteractEvent.class, "interact with (custom|Nexo) string block [%string%]");
-        EventValues.registerEventValue(NexoStringBlockInteractEvent.class, Player.class, new Getter<Player, NexoStringBlockInteractEvent>() {
+        EventValues.registerEventValue(NexoStringBlockInteractEvent.class, Player.class, new Converter<NexoStringBlockInteractEvent, Player>() {
             @Override
-            public Player get(NexoStringBlockInteractEvent arg) {
+            public Player convert(NexoStringBlockInteractEvent arg) {
                 return arg.getPlayer();
             }
         }, 0);
-        EventValues.registerEventValue(NexoStringBlockInteractEvent.class, Block.class, new Getter<Block, NexoStringBlockInteractEvent>() {
+        EventValues.registerEventValue(NexoStringBlockInteractEvent.class, Block.class, new Converter<NexoStringBlockInteractEvent, Block>() {
             @Override
-            public Block get(NexoStringBlockInteractEvent arg) {
+            public Block convert(NexoStringBlockInteractEvent arg) {
                 return arg.getBlock();
             }
         }, 0);
-        EventValues.registerEventValue(NexoStringBlockInteractEvent.class, BlockFace.class, new Getter<BlockFace, NexoStringBlockInteractEvent>() {
+        EventValues.registerEventValue(NexoStringBlockInteractEvent.class, BlockFace.class, new Converter<NexoStringBlockInteractEvent, BlockFace>() {
             @Override
-            public BlockFace get(NexoStringBlockInteractEvent arg) {
+            public BlockFace convert(NexoStringBlockInteractEvent arg) {
                 return arg.getBlockFace();
             }
         }, 0);

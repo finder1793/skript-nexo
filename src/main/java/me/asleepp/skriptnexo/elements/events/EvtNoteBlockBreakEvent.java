@@ -9,7 +9,7 @@ import ch.njol.skript.lang.Literal;
 import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.registrations.EventValues;
-import ch.njol.skript.util.Getter;
+import org.skriptlang.skript.lang.converter.Converter;
 import com.nexomc.nexo.api.events.custom_block.noteblock.NexoNoteBlockBreakEvent;
 import me.asleepp.skriptnexo.SkriptNexo;
 import org.bukkit.Bukkit;
@@ -32,15 +32,15 @@ public class EvtNoteBlockBreakEvent extends SkriptEvent {
 
     static {
         Skript.registerEvent("Custom Note Block Break", EvtNoteBlockBreakEvent.class, NexoNoteBlockBreakEvent.class, "break of (custom|Nexo) (music|note) block [%string%]");
-        EventValues.registerEventValue(NexoNoteBlockBreakEvent.class, Player.class, new Getter<Player, NexoNoteBlockBreakEvent>() {
+        EventValues.registerEventValue(NexoNoteBlockBreakEvent.class, Player.class, new Converter<NexoNoteBlockBreakEvent, Player>() {
             @Override
-            public Player get(NexoNoteBlockBreakEvent arg) {
+            public Player convert(NexoNoteBlockBreakEvent arg) {
                 return arg.getPlayer();
             }
         }, 0);
-        EventValues.registerEventValue(NexoNoteBlockBreakEvent.class, Block.class, new Getter<Block, NexoNoteBlockBreakEvent>() {
+        EventValues.registerEventValue(NexoNoteBlockBreakEvent.class, Block.class, new Converter<NexoNoteBlockBreakEvent, Block>() {
             @Override
-            public Block get(NexoNoteBlockBreakEvent arg) {
+            public Block convert(NexoNoteBlockBreakEvent arg) {
                 return arg.getBlock();
             }
         }, 0);

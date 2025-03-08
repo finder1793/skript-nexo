@@ -9,7 +9,7 @@ import ch.njol.skript.lang.Literal;
 import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.registrations.EventValues;
-import ch.njol.skript.util.Getter;
+import org.skriptlang.skript.lang.converter.Converter;
 import com.nexomc.nexo.api.events.custom_block.stringblock.NexoStringBlockPlaceEvent;
 import me.asleepp.skriptnexo.SkriptNexo;
 import org.bukkit.Bukkit;
@@ -33,21 +33,21 @@ public class EvtStringBlockPlaceEvent extends SkriptEvent {
 
     static {
         Skript.registerEvent("String Block Place", EvtStringBlockPlaceEvent.class, NexoStringBlockPlaceEvent.class, "place of (custom|Nexo) string block [%string%]");
-        EventValues.registerEventValue(NexoStringBlockPlaceEvent.class, Player.class, new Getter<Player, NexoStringBlockPlaceEvent>() {
+        EventValues.registerEventValue(NexoStringBlockPlaceEvent.class, Player.class, new Converter<NexoStringBlockPlaceEvent, Player>() {
             @Override
-            public Player get(NexoStringBlockPlaceEvent arg) {
+            public Player convert(NexoStringBlockPlaceEvent arg) {
                 return arg.getPlayer();
             }
         }, 0);
-        EventValues.registerEventValue(NexoStringBlockPlaceEvent.class, Block.class, new Getter<Block, NexoStringBlockPlaceEvent>() {
+        EventValues.registerEventValue(NexoStringBlockPlaceEvent.class, Block.class, new Converter<NexoStringBlockPlaceEvent, Block>() {
             @Override
-            public Block get(NexoStringBlockPlaceEvent arg) {
+            public Block convert(NexoStringBlockPlaceEvent arg) {
                 return arg.getBlock();
             }
         }, 0);
-        EventValues.registerEventValue(NexoStringBlockPlaceEvent.class, ItemStack.class, new Getter<ItemStack, NexoStringBlockPlaceEvent>() {
+        EventValues.registerEventValue(NexoStringBlockPlaceEvent.class, ItemStack.class, new Converter<NexoStringBlockPlaceEvent, ItemStack>() {
             @Override
-            public ItemStack get(NexoStringBlockPlaceEvent arg) {
+            public ItemStack convert(NexoStringBlockPlaceEvent arg) {
                 return arg.getItemInHand();
             }
         }, 0);

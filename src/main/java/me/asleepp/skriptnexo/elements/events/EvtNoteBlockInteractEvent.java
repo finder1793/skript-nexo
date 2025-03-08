@@ -9,7 +9,7 @@ import ch.njol.skript.lang.Literal;
 import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.registrations.EventValues;
-import ch.njol.skript.util.Getter;
+import org.skriptlang.skript.lang.converter.Converter;
 import com.nexomc.nexo.api.events.custom_block.noteblock.NexoNoteBlockInteractEvent;
 import me.asleepp.skriptnexo.SkriptNexo;
 import org.bukkit.Bukkit;
@@ -32,15 +32,15 @@ public class EvtNoteBlockInteractEvent extends SkriptEvent {
 
     static {
         Skript.registerEvent("Custom Note Block Interact", EvtNoteBlockInteractEvent.class, NexoNoteBlockInteractEvent.class, "interact with (custom|Nexo) (music|note) block [%string%]");
-        EventValues.registerEventValue(NexoNoteBlockInteractEvent.class, Player.class, new Getter<Player, NexoNoteBlockInteractEvent>() {
+        EventValues.registerEventValue(NexoNoteBlockInteractEvent.class, Player.class, new Converter<NexoNoteBlockInteractEvent, Player>() {
             @Override
-            public Player get(NexoNoteBlockInteractEvent arg) {
+            public Player convert(NexoNoteBlockInteractEvent arg) {
                 return arg.getPlayer();
             }
         }, 0);
-        EventValues.registerEventValue(NexoNoteBlockInteractEvent.class, Block.class, new Getter<Block, NexoNoteBlockInteractEvent>() {
+        EventValues.registerEventValue(NexoNoteBlockInteractEvent.class, Block.class, new Converter<NexoNoteBlockInteractEvent, Block>() {
             @Override
-            public Block get(NexoNoteBlockInteractEvent arg) {
+            public Block convert(NexoNoteBlockInteractEvent arg) {
                 return arg.getBlock();
             }
         }, 0);

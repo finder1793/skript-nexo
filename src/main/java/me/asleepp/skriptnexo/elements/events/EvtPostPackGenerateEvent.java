@@ -9,7 +9,7 @@ import ch.njol.skript.lang.Literal;
 import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.registrations.EventValues;
-import ch.njol.skript.util.Getter;
+import org.skriptlang.skript.lang.converter.Converter;
 import com.nexomc.nexo.api.events.resourcepack.NexoPostPackGenerateEvent;
 import org.bukkit.event.Event;
 import team.unnamed.creative.ResourcePack;
@@ -24,9 +24,9 @@ public class EvtPostPackGenerateEvent extends SkriptEvent {
 
     static {
         Skript.registerEvent("Post Pack Generate", EvtPostPackGenerateEvent.class, NexoPostPackGenerateEvent.class, "post pack generate");
-        EventValues.registerEventValue(NexoPostPackGenerateEvent.class, ResourcePack.class, new Getter<ResourcePack, NexoPostPackGenerateEvent>() {
+        EventValues.registerEventValue(NexoPostPackGenerateEvent.class, ResourcePack.class, new Converter<NexoPostPackGenerateEvent, ResourcePack>() {
             @Override
-            public ResourcePack get(NexoPostPackGenerateEvent event) {
+            public ResourcePack convert(NexoPostPackGenerateEvent event) {
                 return event.getResourcePack();
             }
         }, 0);

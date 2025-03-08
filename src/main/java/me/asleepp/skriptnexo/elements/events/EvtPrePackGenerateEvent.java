@@ -9,7 +9,7 @@ import ch.njol.skript.lang.Literal;
 import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.registrations.EventValues;
-import ch.njol.skript.util.Getter;
+import org.skriptlang.skript.lang.converter.Converter;
 import com.nexomc.nexo.api.events.resourcepack.NexoPrePackGenerateEvent;
 import org.bukkit.event.Event;
 import team.unnamed.creative.ResourcePack;
@@ -24,9 +24,9 @@ public class EvtPrePackGenerateEvent extends SkriptEvent {
 
     static {
         Skript.registerEvent("Pre Pack Generate", EvtPrePackGenerateEvent.class, NexoPrePackGenerateEvent.class, "pre pack generate");
-        EventValues.registerEventValue(NexoPrePackGenerateEvent.class, ResourcePack.class, new Getter<ResourcePack, NexoPrePackGenerateEvent>() {
+        EventValues.registerEventValue(NexoPrePackGenerateEvent.class, ResourcePack.class, new Converter<NexoPrePackGenerateEvent, ResourcePack>() {
             @Override
-            public ResourcePack get(NexoPrePackGenerateEvent event) {
+            public ResourcePack convert(NexoPrePackGenerateEvent event) {
                 return event.getResourcePack();
             }
         }, 0);

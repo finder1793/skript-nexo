@@ -9,7 +9,7 @@ import ch.njol.skript.lang.Literal;
 import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.registrations.EventValues;
-import ch.njol.skript.util.Getter;
+import org.skriptlang.skript.lang.converter.Converter;
 import com.nexomc.nexo.api.events.furniture.NexoFurnitureBreakEvent;
 import me.asleepp.skriptnexo.SkriptNexo;
 import org.bukkit.entity.Player;
@@ -31,15 +31,15 @@ public class EvtFurnitureBreakEvent extends SkriptEvent {
 
     static {
         Skript.registerEvent("Furniture Break", EvtFurnitureBreakEvent.class, NexoFurnitureBreakEvent.class, "break of (custom|Nexo) furniture [%string%]");
-        EventValues.registerEventValue(NexoFurnitureBreakEvent.class, Player.class, new Getter<Player, NexoFurnitureBreakEvent>() {
+        EventValues.registerEventValue(NexoFurnitureBreakEvent.class, Player.class, new Converter<NexoFurnitureBreakEvent, Player>() {
             @Override
-            public Player get(NexoFurnitureBreakEvent arg) {
+            public Player convert(NexoFurnitureBreakEvent arg) {
                 return arg.getPlayer();
             }
         }, 0);
-        EventValues.registerEventValue(NexoFurnitureBreakEvent.class, Location.class, new Getter<Location, NexoFurnitureBreakEvent>() {
+        EventValues.registerEventValue(NexoFurnitureBreakEvent.class, Location.class, new Converter<NexoFurnitureBreakEvent, Location>() {
             @Override
-            public Location get(NexoFurnitureBreakEvent event) {
+            public Location convert(NexoFurnitureBreakEvent event) {
                 return event.getBaseEntity().getLocation();
             }
         }, 0);

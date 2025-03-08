@@ -9,7 +9,7 @@ import ch.njol.skript.lang.Literal;
 import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.registrations.EventValues;
-import ch.njol.skript.util.Getter;
+import org.skriptlang.skript.lang.converter.Converter;
 import com.nexomc.nexo.api.events.furniture.NexoFurnitureDamageEvent;
 import com.nexomc.nexo.api.events.furniture.NexoFurnitureInteractEvent;
 import org.bukkit.entity.Player;
@@ -26,9 +26,9 @@ public class EvtFurnitureDamageEvent extends SkriptEvent {
 
     static{
         Skript.registerEvent("Furniture Damage", EvtFurnitureDamageEvent.class, NexoFurnitureDamageEvent.class, "(hurt|damage) of (custom|Nexo) furniture [%string%]");
-        EventValues.registerEventValue(NexoFurnitureDamageEvent.class, Player.class, new Getter<Player, NexoFurnitureDamageEvent>() {
+        EventValues.registerEventValue(NexoFurnitureDamageEvent.class, Player.class, new Converter<NexoFurnitureDamageEvent, Player>() {
             @Override
-            public Player get(NexoFurnitureDamageEvent arg) {
+            public Player convert(NexoFurnitureDamageEvent arg) {
                 return arg.getPlayer();
             }
         }, 0);

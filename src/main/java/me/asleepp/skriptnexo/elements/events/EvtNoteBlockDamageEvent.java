@@ -9,7 +9,7 @@ import ch.njol.skript.lang.Literal;
 import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.registrations.EventValues;
-import ch.njol.skript.util.Getter;
+import org.skriptlang.skript.lang.converter.Converter;
 import com.nexomc.nexo.api.events.custom_block.noteblock.NexoNoteBlockBreakEvent;
 import com.nexomc.nexo.api.events.custom_block.noteblock.NexoNoteBlockDamageEvent;
 import com.nexomc.nexo.api.events.custom_block.noteblock.NexoNoteBlockPlaceEvent;
@@ -28,15 +28,15 @@ public class EvtNoteBlockDamageEvent extends SkriptEvent {
 
     static {
         Skript.registerEvent("Custom Note Block Damage", EvtFurnitureDamageEvent.class, NexoNoteBlockDamageEvent.class, "damage of (custom|Nexo) (music|note) block [%string%]");
-        EventValues.registerEventValue(NexoNoteBlockDamageEvent.class, Player.class, new Getter<Player, NexoNoteBlockDamageEvent>() {
+        EventValues.registerEventValue(NexoNoteBlockDamageEvent.class, Player.class, new Converter<NexoNoteBlockDamageEvent, Player>() {
             @Override
-            public Player get(NexoNoteBlockDamageEvent arg) {
+            public Player convert(NexoNoteBlockDamageEvent arg) {
                 return arg.getPlayer();
             }
         }, 0);
-        EventValues.registerEventValue(NexoNoteBlockDamageEvent.class, Block.class, new Getter<Block, NexoNoteBlockDamageEvent>() {
+        EventValues.registerEventValue(NexoNoteBlockDamageEvent.class, Block.class, new Converter<NexoNoteBlockDamageEvent, Block>() {
             @Override
-            public Block get(NexoNoteBlockDamageEvent arg) {
+            public Block convert(NexoNoteBlockDamageEvent arg) {
                 return arg.getBlock();
             }
         }, 0);

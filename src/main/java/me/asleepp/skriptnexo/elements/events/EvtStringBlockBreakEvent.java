@@ -9,7 +9,7 @@ import ch.njol.skript.lang.Literal;
 import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.registrations.EventValues;
-import ch.njol.skript.util.Getter;
+import org.skriptlang.skript.lang.converter.Converter;
 import com.nexomc.nexo.api.events.custom_block.noteblock.NexoNoteBlockInteractEvent;
 import com.nexomc.nexo.api.events.custom_block.stringblock.NexoStringBlockBreakEvent;
 import com.nexomc.nexo.api.events.custom_block.stringblock.NexoStringBlockInteractEvent;
@@ -35,24 +35,24 @@ public class EvtStringBlockBreakEvent extends SkriptEvent {
 
     static {
         Skript.registerEvent("String Block Break", EvtStringBlockBreakEvent.class, NexoStringBlockBreakEvent.class, "break of (custom|Nexo) string block [%string%]");
-        EventValues.registerEventValue(NexoStringBlockBreakEvent.class, Player.class, new Getter<Player, NexoStringBlockBreakEvent>() {
+        EventValues.registerEventValue(NexoStringBlockBreakEvent.class, Player.class, new Converter<NexoStringBlockBreakEvent, Player>() {
             @Override
-            public Player get(NexoStringBlockBreakEvent arg) {
+            public Player convert(NexoStringBlockBreakEvent arg) {
                 return arg.getPlayer();
             }
-        },0);
-        EventValues.registerEventValue(NexoStringBlockBreakEvent.class, Block.class, new Getter<Block, NexoStringBlockBreakEvent>() {
+        }, 0);
+        EventValues.registerEventValue(NexoStringBlockBreakEvent.class, Block.class, new Converter<NexoStringBlockBreakEvent, Block>() {
             @Override
-            public Block get(NexoStringBlockBreakEvent arg) {
+            public Block convert(NexoStringBlockBreakEvent arg) {
                 return arg.getBlock();
             }
-        },0);
-        EventValues.registerEventValue(NexoStringBlockBreakEvent.class, Drop.class, new Getter<Drop, NexoStringBlockBreakEvent>() {
+        }, 0);
+        EventValues.registerEventValue(NexoStringBlockBreakEvent.class, Drop.class, new Converter<NexoStringBlockBreakEvent, Drop>() {
             @Override
-            public Drop get(NexoStringBlockBreakEvent arg) {
+            public Drop convert(NexoStringBlockBreakEvent arg) {
                 return arg.getDrop();
             }
-        },0);
+        }, 0);
     }
 
     @Override

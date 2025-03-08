@@ -9,7 +9,7 @@ import ch.njol.skript.lang.Literal;
 import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.registrations.EventValues;
-import ch.njol.skript.util.Getter;
+import org.skriptlang.skript.lang.converter.Converter;
 import com.nexomc.nexo.api.events.furniture.NexoFurniturePlaceEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.Location;
@@ -26,21 +26,21 @@ public class EvtFurniturePlaceEvent extends SkriptEvent {
 
     static {
         Skript.registerEvent("Furniture Place", EvtFurniturePlaceEvent.class, NexoFurniturePlaceEvent.class, "place of (custom|Nexo) furniture [%string%]");
-        EventValues.registerEventValue(NexoFurniturePlaceEvent.class, Player.class, new Getter<Player, NexoFurniturePlaceEvent>() {
+        EventValues.registerEventValue(NexoFurniturePlaceEvent.class, Player.class, new Converter<NexoFurniturePlaceEvent, Player>() {
             @Override
-            public Player get(NexoFurniturePlaceEvent arg) {
+            public Player convert(NexoFurniturePlaceEvent arg) {
                 return arg.getPlayer();
             }
         }, 0);
-        EventValues.registerEventValue(NexoFurniturePlaceEvent.class, ItemStack.class, new Getter<ItemStack, NexoFurniturePlaceEvent>() {
+        EventValues.registerEventValue(NexoFurniturePlaceEvent.class, ItemStack.class, new Converter<NexoFurniturePlaceEvent, ItemStack>() {
             @Override
-            public ItemStack get(NexoFurniturePlaceEvent arg) {
+            public ItemStack convert(NexoFurniturePlaceEvent arg) {
                 return arg.getItemInHand();
             }
         }, 0);
-        EventValues.registerEventValue(NexoFurniturePlaceEvent.class, Location.class, new Getter<Location, NexoFurniturePlaceEvent>() {
+        EventValues.registerEventValue(NexoFurniturePlaceEvent.class, Location.class, new Converter<NexoFurniturePlaceEvent, Location>() {
             @Override
-            public Location get(NexoFurniturePlaceEvent event) {
+            public Location convert(NexoFurniturePlaceEvent event) {
                 return event.getBaseEntity().getLocation();
             }
         }, 0);

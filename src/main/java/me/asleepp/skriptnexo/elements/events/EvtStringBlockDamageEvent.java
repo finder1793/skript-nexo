@@ -14,6 +14,7 @@ import com.nexomc.nexo.api.events.custom_block.stringblock.NexoStringBlockDamage
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
+import org.skriptlang.skript.lang.converter.Converter;
 
 import javax.annotation.Nullable;
 @Name("On Custom String Block Damage")
@@ -26,15 +27,15 @@ public class EvtStringBlockDamageEvent extends SkriptEvent {
 
     static {
         Skript.registerEvent("String Block Damage", EvtStringBlockDamageEvent.class, NexoStringBlockDamageEvent.class, "damage of (custom|Nexo) string block [%string%]");
-        EventValues.registerEventValue(NexoStringBlockDamageEvent.class, Player.class, new Getter<Player, NexoStringBlockDamageEvent>() {
+        EventValues.registerEventValue(NexoStringBlockDamageEvent.class, Player.class, new Converter<NexoStringBlockDamageEvent, Player>() {
             @Override
-            public Player get(NexoStringBlockDamageEvent arg) {
+            public Player convert(NexoStringBlockDamageEvent arg) {
                 return arg.getPlayer();
             }
         }, 0);
-        EventValues.registerEventValue(NexoStringBlockDamageEvent.class, Block.class, new Getter<Block, NexoStringBlockDamageEvent>() {
+        EventValues.registerEventValue(NexoStringBlockDamageEvent.class, Block.class, new Converter<NexoStringBlockDamageEvent, Block>() {
             @Override
-            public Block get(NexoStringBlockDamageEvent arg) {
+            public Block convert(NexoStringBlockDamageEvent arg) {
                 return arg.getBlock();
             }
         }, 0);

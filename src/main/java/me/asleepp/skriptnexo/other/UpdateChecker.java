@@ -14,6 +14,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.concurrent.CompletableFuture;
+import java.util.logging.Level;
 
 public class UpdateChecker implements Listener {
 
@@ -57,16 +58,16 @@ public class UpdateChecker implements Listener {
                         latestVersion = jsonResponse.get("tag_name").getAsString();
 
                         if (!currentVersion.equals(latestVersion)) {
-                            SkriptNexo.getInstance().getLogger().warning("An update for skript-nexo is available: " + latestVersion + " (current version: " + currentVersion + ")");
+                            SkriptNexo.getInstance().getLogger().log(Level.WARNING, "An update for skript-nexo is available: " + latestVersion + " (current version: " + currentVersion + ")");
                         } else {
-                            SkriptNexo.getInstance().getLogger().info("skript-nexo is up to date!");
+                            SkriptNexo.getInstance().getLogger().log(Level.INFO, "skript-nexo is up to date!");
                         }
                     } else {
-                        SkriptNexo.getInstance().getLogger().severe("Failed to check for updates: Unexpected JSON format.");
+                        SkriptNexo.getInstance().getLogger().log(Level.WARNING, "Failed to check for updates: Unexpected JSON format.");
                     }
                 })
                 .exceptionally(e -> {
-                    SkriptNexo.getInstance().getLogger().severe("Failed to check for updates: " + e.getMessage());
+                    SkriptNexo.getInstance().getLogger().log(Level.WARNING, "Failed to check for updates: " + e.getMessage());
                     return null;
                 });
     }
