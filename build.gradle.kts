@@ -23,7 +23,7 @@ java {
 
 description = "A skript addon that aims to link Nexo and Skript"
 group = "me.asleepp"
-version = "2.0.6"
+version = "2.1.0"
 
 dependencies {
     compileOnly(libs.paper.api)
