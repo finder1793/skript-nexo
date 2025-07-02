@@ -14,6 +14,7 @@ repositories {
     maven("https://repo.papermc.io/repository/maven-public/")
     maven("https://repo.skriptlang.org/releases")
     maven("https://repo.nexomc.com/snapshots/")
+    maven("https://repo.nexomc.com/releases/")
 }
 
 java {
