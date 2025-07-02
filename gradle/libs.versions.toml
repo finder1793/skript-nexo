@@ -1,9 +1,9 @@
 [versions]
-paper-api = "1.21-R0.1-SNAPSHOT"
+paper-api = "1.21.4-R0.1-SNAPSHOT"
 lombok = "1.18.34"
 shadow = "8.1.8"
 run-paper = "2.3.0"
-skript = "2.10.0"
+skript = "2.11.2"
 nexo = "1.2.0-dev.4"
 creative = "1.3.0"
 

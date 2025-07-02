@@ -23,7 +23,7 @@ java {
 
 description = "A skript addon that aims to link Nexo and Skript"
 group = "me.asleepp"
-version = "2.1.0"
+version = "2.1.1"
 
 dependencies {
     compileOnly(libs.paper.api)
@@ -81,7 +81,7 @@ tasks {
     // 1.17           = Java 16
     // 1.18 - 1.20.4  = Java 17
     // 1-20.5+        = Java 21
-    val version = "1.21.1"
+    val version = "1.21.4"
     val javaVersion = JavaLanguageVersion.of(21)
 
     val jvmArgsExternal = listOf(
@@ -97,8 +97,8 @@ tasks {
         })
 
         downloadPlugins {
-            url("https://github.com/SkriptLang/Skript/releases/download/2.9.4/Skript-2.9.4.jar")
-            // Add your own plugins to download here, stick any that you can't download into the run folder this generates.
+            url("https://github.com/SkriptLang/Skript/releases/download/2.11.2/Skript-2.11.2.jar")
+
         }
 
         jvmArgs = jvmArgsExternal
