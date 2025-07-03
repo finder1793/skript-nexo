@@ -2,7 +2,7 @@ package me.asleepp.skriptnexo;
 
 import java.io.IOException;
 
-import ch.njol.skript.bstats.bukkit.Metrics;
+
 import ch.njol.skript.util.Version;
 import me.asleepp.skriptnexo.config.SkriptNexoConfig;
 import org.bukkit.plugin.Plugin;
@@ -65,8 +65,7 @@ public class SkriptNexo extends JavaPlugin {
         instance = this;
         configuration = new SkriptNexoConfig(this);
 
-        int pluginId = 21274; // todo replace this with new bstats id
-        Metrics metrics = new Metrics(this, pluginId);
+
 
         addon = Skript.registerAddon(this);
         addon.setLanguageFileDirectory("lang");
