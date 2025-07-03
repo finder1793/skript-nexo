@@ -48,10 +48,18 @@ public class EffSetMechanicProperty extends Effect {
     protected void execute(Event e) {
         String id = mechanicId.getSingle(e);
         String property = propertyName.getSingle(e);
-        Object val = value.getSingle(e);
-        
+
+        // Get the value and handle UnparsedLiteral conversion
+        Object val = null;
+        try {
+            val = value.getSingle(e);
+        } catch (Exception ex) {
+            Skript.error("Error getting value: " + ex.getMessage());
+            return;
+        }
+
         if (id == null || property == null || val == null) return;
-        
+
         SkriptMechanicFactory factory = (SkriptMechanicFactory) MechanicsManager.INSTANCE.getMechanicFactory(id);
         if (factory != null) {
             factory.setProperty(property, val);
