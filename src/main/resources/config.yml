@@ -34,6 +34,11 @@ events:
       enabled: true
       cooldown: 1
 
+  mechanic:
+    interact:
+      enabled: true
+      cooldown: 1
+
 settings:
   debug-mode: false
   cache-size: 100

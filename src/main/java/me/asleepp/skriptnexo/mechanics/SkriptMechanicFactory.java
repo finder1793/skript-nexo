@@ -27,4 +27,8 @@ public class SkriptMechanicFactory extends MechanicFactory {
     public Object getProperty(String key) {
         return properties.get(key);
     }
+
+    public String getMechanicId() {
+        return mechanicId;
+    }
 }

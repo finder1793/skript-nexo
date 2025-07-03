@@ -1,0 +1,82 @@
+# Example Skript script for creating and using custom mechanics in Skript-Nexo
+# This script demonstrates how to create a custom "toasty" mechanic that sets players on fire when they interact with it
+#
+# Note: Once created, this mechanic can be used in Nexo configs by referencing its ID:
+# 
+# Example in items.yml:
+# items:
+#   toasty_sword:
+#     material: DIAMOND_SWORD
+#     name: "&6Toasty Sword"
+#     lore:
+#       - "&eThis sword is extremely hot!"
+#     mechanics:
+#       - toasty
+
+# Create the custom mechanic when the server starts
+on load:
+    # Create a new mechanic with the ID "toasty"
+    create nexo mechanic with id "toasty"
+
+    # Set properties for the mechanic
+    set property "damage" of mechanic "toasty" to 5
+    set property "enabled" of mechanic "toasty" to true
+    set property "duration" of mechanic "toasty" to 3
+
+    # Register a handler for the mechanic's interact event
+    register handler for mechanic "toasty" event "interact":
+        # This code will run when a player interacts with an object that has the "toasty" mechanic
+        send "§6You feel a warm sensation!" to player
+
+        # Get the damage and duration properties
+        set {_damage} to property "damage" of mechanic "toasty"
+        set {_duration} to property "duration" of mechanic "toasty"
+
+        # Apply effects based on the mechanic's properties
+        if player is sneaking:
+            # Reduced effect when sneaking
+            set {_damage} to {_damage} / 2
+            set {_duration} to {_duration} / 2
+            send "§e(Sneaking reduced the effect)" to player
+
+        # Apply fire effect
+        ignite player for {_duration} seconds
+
+        # Apply damage
+        damage player by {_damage}
+
+# Command to give a player a toasty sword
+command /toastysword:
+    permission: skriptnexo.toasty
+    trigger:
+        # Create a diamond sword with the toasty mechanic
+        give player diamond sword named "§6Toasty Sword" with lore "§eThis sword is extremely hot!" and "§cApplies the toasty mechanic when used"
+
+        # You would need to use Nexo's API to apply the mechanic to the item
+        # This is a placeholder for that functionality
+        send "§aYou received a Toasty Sword!" to player
+        send "§7(In a real implementation, this would apply the toasty mechanic to the sword)" to player
+
+# Command to place a toasty block
+command /toastyblock:
+    permission: skriptnexo.toasty
+    trigger:
+        # Place a block with the toasty mechanic at the player's target block
+        set {_block} to player's targeted block
+        if {_block} is set:
+            # You would need to use Nexo's API to apply the mechanic to the block
+            # This is a placeholder for that functionality
+            send "§aPlaced a block with the toasty mechanic!" to player
+            send "§7(In a real implementation, this would apply the toasty mechanic to the block)" to player
+        else:
+            send "§cYou must be looking at a block!" to player
+
+# Event to handle when a player interacts with a block that has the toasty mechanic
+on interact with mechanic "toasty":
+    # This event is triggered by the MechanicHandler when a player interacts with a block that has the toasty mechanic
+    # The handler registered above will be executed
+
+    # You can add additional logic here if needed
+    if player's tool is a water bucket:
+        send "§bThe water cooled down the toasty mechanic!" to player
+        cancel event

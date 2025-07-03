@@ -41,6 +41,9 @@ public class SkriptNexoConfig {
         setEventDefaults("noteblock.interact");
         setEventDefaults("noteblock.place");
 
+        // Mechanic events
+        setEventDefaults("mechanic.interact");
+
         config.addDefault("settings.debug-mode", false);
         config.addDefault("settings.cache-size", 100);
 
