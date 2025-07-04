@@ -49,16 +49,49 @@ public class EffSetMechanicProperty extends Effect {
         String id = mechanicId.getSingle(e);
         String property = propertyName.getSingle(e);
 
+        if (id == null || property == null) return;
+
         // Get the value and handle UnparsedLiteral conversion
         Object val = null;
         try {
+            // First try to get the value directly
             val = value.getSingle(e);
         } catch (Exception ex) {
-            Skript.error("Error getting value: " + ex.getMessage());
-            return;
+            // If that fails, try to get the string representation
+            try {
+                String stringVal = value.toString(e, false);
+
+                // Remove quotes if present (common with string literals)
+                if (stringVal.startsWith("\"") && stringVal.endsWith("\"")) {
+                    stringVal = stringVal.substring(1, stringVal.length() - 1);
+                }
+
+                // Try to convert to appropriate type based on the string value
+                if (stringVal.equalsIgnoreCase("true") || stringVal.equalsIgnoreCase("false")) {
+                    val = Boolean.parseBoolean(stringVal);
+                } else {
+                    try {
+                        // Try to parse as a number
+                        if (stringVal.contains(".")) {
+                            val = Double.parseDouble(stringVal);
+                        } else {
+                            val = Integer.parseInt(stringVal);
+                        }
+                    } catch (NumberFormatException numEx) {
+                        // If not a number, use as string
+                        val = stringVal;
+                    }
+                }
+            } catch (Exception ex2) {
+                Skript.error("Error converting value: " + ex.getMessage() + ", " + ex2.getMessage());
+                return;
+            }
         }
 
-        if (id == null || property == null || val == null) return;
+        if (val == null) {
+            Skript.error("Could not get value for property '" + property + "'");
+            return;
+        }
 
         SkriptMechanicFactory factory = (SkriptMechanicFactory) MechanicsManager.INSTANCE.getMechanicFactory(id);
         if (factory != null) {

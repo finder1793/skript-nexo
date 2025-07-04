@@ -5,7 +5,6 @@ import ch.njol.skript.lang.Effect;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.TriggerItem;
-import ch.njol.skript.lang.TriggerSection;
 import ch.njol.util.Kleenean;
 import me.asleepp.skriptnexo.mechanics.MechanicHandler;
 import org.bukkit.event.Event;
@@ -55,11 +54,13 @@ public class EffRegisterMechanicHandler extends Effect {
                " event " + eventType.toString(e, debug);
     }
 
+    @Override
     public TriggerItem setNext(TriggerItem next) {
         this.trigger = next;
-        return next;
+        return super.setNext(next);
     }
 
+    @Override
     public TriggerItem getNext() {
         return trigger;
     }
