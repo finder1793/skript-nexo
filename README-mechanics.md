@@ -82,22 +82,6 @@ set {_damage} to property "damage" of mechanic "toasty"
 set {_enabled} to mechanic "toasty"'s property "enabled"
 ```
 
-## Registering Mechanic Handlers
-
-You can register handlers for mechanic events using:
-
-```
-register handler for mechanic "mechanic_id" event "event_type":
-    # Handler code here
-```
-
-For example:
-
-```
-register handler for mechanic "toasty" event "interact":
-    send "You feel a warm sensation!" to player
-    ignite player for 3 seconds
-```
 
 ## Checking for Mechanics
 
