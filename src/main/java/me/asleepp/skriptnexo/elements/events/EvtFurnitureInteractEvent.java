@@ -31,39 +31,53 @@ import java.util.Map;
 public class EvtFurnitureInteractEvent extends SkriptEvent {
     private Literal<String> furnitureID;
     private final Map<Player, Long> lastEventTimestamps = new HashMap<>();
+    private static boolean skriptReflectPresent = false;
 
     static {
-        Skript.registerEvent("Furniture interact", EvtFurnitureInteractEvent.class, NexoFurnitureInteractEvent.class, "interact with (custom|Nexo) furniture [%string%]");
-        EventValues.registerEventValue(NexoFurnitureInteractEvent.class, Player.class, new Converter<NexoFurnitureInteractEvent, Player>() {
-            @Override
-            public Player convert(NexoFurnitureInteractEvent arg) {
-                return arg.getPlayer();
-            }
-        }, 0);
-        EventValues.registerEventValue(NexoFurnitureInteractEvent.class, ItemStack.class, new Converter<NexoFurnitureInteractEvent, ItemStack>() {
-            @Override
-            public ItemStack convert(NexoFurnitureInteractEvent arg) {
-                return arg.getItemInHand();
-            }
-        }, 0);
-        EventValues.registerEventValue(NexoFurnitureInteractEvent.class, Location.class, new Converter<NexoFurnitureInteractEvent, Location>() {
-            @Override
-            public Location convert(NexoFurnitureInteractEvent event) {
-                return event.getBaseEntity().getLocation();
-            }
-        }, 0);
-        EventValues.registerEventValue(NexoFurnitureInteractEvent.class, BlockFace.class, new Converter<NexoFurnitureInteractEvent, BlockFace>() {
-            @Override
-            public BlockFace convert(NexoFurnitureInteractEvent event) {
-                return event.getBlockFace();
-            }
-        }, 0);
-        EventValues.registerEventValue(NexoFurnitureInteractEvent.class, EquipmentSlot.class, new Converter<NexoFurnitureInteractEvent, EquipmentSlot>() {
-            @Override
-            public EquipmentSlot convert(NexoFurnitureInteractEvent event) {
-                return event.getHand();
-            }
-        }, 0);
+        try {
+            Class.forName("com.btk5h.skriptmirror.SkriptMirror");
+            skriptReflectPresent = true;
+        } catch (ClassNotFoundException ignored) {}
+
+        String eventName = "NexoFurnitureInteract_Internal";
+        String eventPattern = "interact with (custom|Nexo) furniture [%string%]";
+        if (!skriptReflectPresent) {
+            Skript.registerEvent(eventName, EvtFurnitureInteractEvent.class, NexoFurnitureInteractEvent.class, eventPattern);
+            EventValues.registerEventValue(NexoFurnitureInteractEvent.class, Player.class, new Converter<NexoFurnitureInteractEvent, Player>() {
+                @Override
+                public Player convert(NexoFurnitureInteractEvent arg) {
+                    return arg.getPlayer();
+                }
+            }, 0);
+            EventValues.registerEventValue(NexoFurnitureInteractEvent.class, ItemStack.class, new Converter<NexoFurnitureInteractEvent, ItemStack>() {
+                @Override
+                public ItemStack convert(NexoFurnitureInteractEvent arg) {
+                    return arg.getItemInHand();
+                }
+            }, 0);
+            EventValues.registerEventValue(NexoFurnitureInteractEvent.class, Location.class, new Converter<NexoFurnitureInteractEvent, Location>() {
+                @Override
+                public Location convert(NexoFurnitureInteractEvent event) {
+                    return event.getBaseEntity().getLocation();
+                }
+            }, 0);
+            EventValues.registerEventValue(NexoFurnitureInteractEvent.class, BlockFace.class, new Converter<NexoFurnitureInteractEvent, BlockFace>() {
+                @Override
+                public BlockFace convert(NexoFurnitureInteractEvent event) {
+                    return event.getBlockFace();
+                }
+            }, 0);
+            EventValues.registerEventValue(NexoFurnitureInteractEvent.class, EquipmentSlot.class, new Converter<NexoFurnitureInteractEvent, EquipmentSlot>() {
+                @Override
+                public EquipmentSlot convert(NexoFurnitureInteractEvent event) {
+                    return event.getHand();
+                }
+            }, 0);
+        } else {
+            // Alternate registration for skript-reflect
+            Skript.registerEvent(eventName + "_Reflect", EvtFurnitureInteractEvent.class, NexoFurnitureInteractEvent.class, eventPattern);
+            // You can add more workaround logic here if needed
+        }
     }
 
     @Override

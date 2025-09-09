@@ -23,15 +23,29 @@ import javax.annotation.Nullable;
 public class EvtFurnitureDamageEvent extends SkriptEvent {
 
     private Literal<String> furnitureID;
+    private static boolean skriptReflectPresent = false;
 
-    static{
-        Skript.registerEvent("Furniture Damage", EvtFurnitureDamageEvent.class, NexoFurnitureDamageEvent.class, "(hurt|damage) of (custom|Nexo) furniture [%string%]");
-        EventValues.registerEventValue(NexoFurnitureDamageEvent.class, Player.class, new Converter<NexoFurnitureDamageEvent, Player>() {
-            @Override
-            public Player convert(NexoFurnitureDamageEvent arg) {
-                return arg.getPlayer();
-            }
-        }, 0);
+    static {
+        try {
+            Class.forName("com.btk5h.skriptmirror.SkriptMirror");
+            skriptReflectPresent = true;
+        } catch (ClassNotFoundException ignored) {}
+
+        String eventName = "NexoFurnitureDamage_Internal";
+        String eventPattern = "(hurt|damage) of (custom|Nexo) furniture [%string%]";
+        if (!skriptReflectPresent) {
+            Skript.registerEvent(eventName, EvtFurnitureDamageEvent.class, NexoFurnitureDamageEvent.class, eventPattern);
+            EventValues.registerEventValue(NexoFurnitureDamageEvent.class, Player.class, new Converter<NexoFurnitureDamageEvent, Player>() {
+                @Override
+                public Player convert(NexoFurnitureDamageEvent arg) {
+                    return arg.getPlayer();
+                }
+            }, 0);
+        } else {
+            // Alternate registration for skript-reflect
+            Skript.registerEvent(eventName + "_Reflect", EvtFurnitureDamageEvent.class, NexoFurnitureDamageEvent.class, eventPattern);
+            // You can add more workaround logic here if needed
+        }
     }
     @Override
     public boolean init(Literal<?>[] args, int matchedPattern, SkriptParser.ParseResult parseResult) {
