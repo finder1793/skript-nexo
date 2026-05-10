@@ -1,6 +1,5 @@
 package me.asleepp.skriptnexo.elements.events;
 
-import ch.njol.skript.Skript;
 import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
@@ -8,8 +7,10 @@ import ch.njol.skript.doc.Since;
 import ch.njol.skript.lang.Literal;
 import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser;
-import ch.njol.skript.registrations.EventValues;
-import org.skriptlang.skript.lang.converter.Converter;
+import org.skriptlang.skript.bukkit.lang.eventvalue.EventValue;
+import org.skriptlang.skript.bukkit.lang.eventvalue.EventValueRegistry;
+import org.skriptlang.skript.bukkit.registration.BukkitSyntaxInfos;
+import org.skriptlang.skript.registration.SyntaxRegistry;
 import com.nexomc.nexo.api.events.custom_block.stringblock.NexoStringBlockInteractEvent;
 import me.asleepp.skriptnexo.SkriptNexo;
 import org.bukkit.Bukkit;
@@ -31,27 +32,22 @@ public class EvtStringBlockInteractEvent extends SkriptEvent {
     private Literal<String> stringBlockID;
     private final Map<Player, Long> lastEventTimestamps = new HashMap<>();
 
-    static {
-        Skript.registerEvent("String Block Interact", EvtStringBlockInteractEvent.class, NexoStringBlockInteractEvent.class, "interact with (custom|Nexo) string block [%string%]");
-        EventValues.registerEventValue(NexoStringBlockInteractEvent.class, Player.class, new Converter<NexoStringBlockInteractEvent, Player>() {
-            @Override
-            public Player convert(NexoStringBlockInteractEvent arg) {
-                return arg.getPlayer();
-            }
-        }, 0);
-        EventValues.registerEventValue(NexoStringBlockInteractEvent.class, Block.class, new Converter<NexoStringBlockInteractEvent, Block>() {
-            @Override
-            public Block convert(NexoStringBlockInteractEvent arg) {
-                return arg.getBlock();
-            }
-        }, 0);
-        EventValues.registerEventValue(NexoStringBlockInteractEvent.class, BlockFace.class, new Converter<NexoStringBlockInteractEvent, BlockFace>() {
-            @Override
-            public BlockFace convert(NexoStringBlockInteractEvent arg) {
-                return arg.getBlockFace();
-            }
-        }, 0);
+    @SuppressWarnings("unchecked")
+    private static void register() {
+        SyntaxRegistry syntaxRegistry = SkriptNexo.getAddonInstance().syntaxRegistry();
+        syntaxRegistry.register(BukkitSyntaxInfos.Event.KEY,
+            BukkitSyntaxInfos.Event.builder(EvtStringBlockInteractEvent.class, "String Block Interact")
+                .addEvent(NexoStringBlockInteractEvent.class)
+                .addPatterns("interact with (custom|Nexo) string block [%string%]")
+                .supplier(EvtStringBlockInteractEvent::new)
+                .build());
+        EventValueRegistry evr = SkriptNexo.getAddonInstance().registry(EventValueRegistry.class);
+        evr.register(EventValue.simple(NexoStringBlockInteractEvent.class, Player.class, NexoStringBlockInteractEvent::getPlayer));
+        evr.register(EventValue.simple(NexoStringBlockInteractEvent.class, Block.class, NexoStringBlockInteractEvent::getBlock));
+        evr.register(EventValue.simple(NexoStringBlockInteractEvent.class, BlockFace.class, NexoStringBlockInteractEvent::getBlockFace));
     }
+
+    static { register(); }
 
     @Override
     public boolean init(Literal<?>[] args, int matchedPattern, SkriptParser.ParseResult parseResult) {

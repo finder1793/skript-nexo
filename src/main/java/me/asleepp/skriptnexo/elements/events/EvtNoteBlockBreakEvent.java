@@ -1,6 +1,5 @@
 package me.asleepp.skriptnexo.elements.events;
 
-import ch.njol.skript.Skript;
 import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
@@ -8,8 +7,10 @@ import ch.njol.skript.doc.Since;
 import ch.njol.skript.lang.Literal;
 import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser;
-import ch.njol.skript.registrations.EventValues;
-import org.skriptlang.skript.lang.converter.Converter;
+import org.skriptlang.skript.bukkit.lang.eventvalue.EventValue;
+import org.skriptlang.skript.bukkit.lang.eventvalue.EventValueRegistry;
+import org.skriptlang.skript.bukkit.registration.BukkitSyntaxInfos;
+import org.skriptlang.skript.registration.SyntaxRegistry;
 import com.nexomc.nexo.api.events.custom_block.noteblock.NexoNoteBlockBreakEvent;
 import me.asleepp.skriptnexo.SkriptNexo;
 import org.bukkit.Bukkit;
@@ -30,21 +31,21 @@ public class EvtNoteBlockBreakEvent extends SkriptEvent {
     private Literal<String> noteBlockID;
     private final Map<Player, Long> lastEventTimestamps = new HashMap<>();
 
-    static {
-        Skript.registerEvent("Custom Note Block Break", EvtNoteBlockBreakEvent.class, NexoNoteBlockBreakEvent.class, "break of (custom|Nexo) (music|note) block [%string%]");
-        EventValues.registerEventValue(NexoNoteBlockBreakEvent.class, Player.class, new Converter<NexoNoteBlockBreakEvent, Player>() {
-            @Override
-            public Player convert(NexoNoteBlockBreakEvent arg) {
-                return arg.getPlayer();
-            }
-        }, 0);
-        EventValues.registerEventValue(NexoNoteBlockBreakEvent.class, Block.class, new Converter<NexoNoteBlockBreakEvent, Block>() {
-            @Override
-            public Block convert(NexoNoteBlockBreakEvent arg) {
-                return arg.getBlock();
-            }
-        }, 0);
+    @SuppressWarnings("unchecked")
+    private static void register() {
+        SyntaxRegistry syntaxRegistry = SkriptNexo.getAddonInstance().syntaxRegistry();
+        syntaxRegistry.register(BukkitSyntaxInfos.Event.KEY,
+            BukkitSyntaxInfos.Event.builder(EvtNoteBlockBreakEvent.class, "Custom Note Block Break")
+                .addEvent(NexoNoteBlockBreakEvent.class)
+                .addPatterns("break of (custom|Nexo) (music|note) block [%string%]")
+                .supplier(EvtNoteBlockBreakEvent::new)
+                .build());
+        EventValueRegistry evr = SkriptNexo.getAddonInstance().registry(EventValueRegistry.class);
+        evr.register(EventValue.simple(NexoNoteBlockBreakEvent.class, Player.class, NexoNoteBlockBreakEvent::getPlayer));
+        evr.register(EventValue.simple(NexoNoteBlockBreakEvent.class, Block.class, NexoNoteBlockBreakEvent::getBlock));
     }
+
+    static { register(); }
 
     @Override
     public boolean init(Literal<?>[] args, int matchedPattern, SkriptParser.ParseResult parseResult) {

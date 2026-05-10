@@ -1,9 +1,10 @@
 package me.asleepp.skriptnexo.elements.effects;
 
-import ch.njol.skript.Skript;
 import ch.njol.skript.lang.Effect;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
+import org.skriptlang.skript.registration.SyntaxInfo;
+import org.skriptlang.skript.registration.SyntaxRegistry;
 import ch.njol.util.Kleenean;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Description;
@@ -28,8 +29,12 @@ import java.io.File;
 public class EffReloadMechanics extends Effect {
 
     static {
-        Skript.registerEffect(EffReloadMechanics.class, 
-            "reload [all] [nexo] mechanics");
+        SyntaxRegistry registry = SkriptNexo.getAddonInstance().syntaxRegistry();
+        registry.register(SyntaxRegistry.EFFECT,
+            SyntaxInfo.builder(EffReloadMechanics.class)
+                .addPatterns("reload [all] [nexo] mechanics")
+                .supplier(EffReloadMechanics::new)
+                .build());
     }
 
     @Override

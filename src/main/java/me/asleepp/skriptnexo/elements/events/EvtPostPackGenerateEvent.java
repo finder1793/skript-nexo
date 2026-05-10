@@ -1,6 +1,5 @@
 package me.asleepp.skriptnexo.elements.events;
 
-import ch.njol.skript.Skript;
 import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
@@ -8,9 +7,12 @@ import ch.njol.skript.doc.Since;
 import ch.njol.skript.lang.Literal;
 import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser;
-import ch.njol.skript.registrations.EventValues;
-import org.skriptlang.skript.lang.converter.Converter;
+import org.skriptlang.skript.bukkit.lang.eventvalue.EventValue;
+import org.skriptlang.skript.bukkit.lang.eventvalue.EventValueRegistry;
+import org.skriptlang.skript.bukkit.registration.BukkitSyntaxInfos;
+import org.skriptlang.skript.registration.SyntaxRegistry;
 import com.nexomc.nexo.api.events.resourcepack.NexoPostPackGenerateEvent;
+import me.asleepp.skriptnexo.SkriptNexo;
 import org.bukkit.event.Event;
 import team.unnamed.creative.ResourcePack;
 
@@ -22,15 +24,20 @@ import javax.annotation.Nullable;
 @Since("1.0")
 public class EvtPostPackGenerateEvent extends SkriptEvent {
 
-    static {
-        Skript.registerEvent("Post Pack Generate", EvtPostPackGenerateEvent.class, NexoPostPackGenerateEvent.class, "post pack generate");
-        EventValues.registerEventValue(NexoPostPackGenerateEvent.class, ResourcePack.class, new Converter<NexoPostPackGenerateEvent, ResourcePack>() {
-            @Override
-            public ResourcePack convert(NexoPostPackGenerateEvent event) {
-                return event.getResourcePack();
-            }
-        }, 0);
+    @SuppressWarnings("unchecked")
+    private static void register() {
+        SyntaxRegistry syntaxRegistry = SkriptNexo.getAddonInstance().syntaxRegistry();
+        syntaxRegistry.register(BukkitSyntaxInfos.Event.KEY,
+            BukkitSyntaxInfos.Event.builder(EvtPostPackGenerateEvent.class, "Post Pack Generate")
+                .addEvent(NexoPostPackGenerateEvent.class)
+                .addPatterns("post pack generate")
+                .supplier(EvtPostPackGenerateEvent::new)
+                .build());
+        EventValueRegistry evr = SkriptNexo.getAddonInstance().registry(EventValueRegistry.class);
+        evr.register(EventValue.simple(NexoPostPackGenerateEvent.class, ResourcePack.class, NexoPostPackGenerateEvent::getResourcePack));
     }
+
+    static { register(); }
 
     @Override
     public boolean init(Literal<?>[] args, int matchedPattern, SkriptParser.ParseResult parseResult) {

@@ -1,6 +1,5 @@
 package me.asleepp.skriptnexo.elements.events;
 
-import ch.njol.skript.Skript;
 import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
@@ -8,8 +7,10 @@ import ch.njol.skript.doc.Since;
 import ch.njol.skript.lang.Literal;
 import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser;
-import ch.njol.skript.registrations.EventValues;
-import org.skriptlang.skript.lang.converter.Converter;
+import org.skriptlang.skript.bukkit.lang.eventvalue.EventValue;
+import org.skriptlang.skript.bukkit.lang.eventvalue.EventValueRegistry;
+import org.skriptlang.skript.bukkit.registration.BukkitSyntaxInfos;
+import org.skriptlang.skript.registration.SyntaxRegistry;
 import com.nexomc.nexo.api.events.furniture.NexoFurnitureBreakEvent;
 import me.asleepp.skriptnexo.SkriptNexo;
 import org.bukkit.entity.Player;
@@ -29,21 +30,21 @@ public class EvtFurnitureBreakEvent extends SkriptEvent {
     private Literal<String> furnitureID;
     private final Map<Player, Long> lastEventTimestamps = new HashMap<>();
 
-    static {
-        Skript.registerEvent("Furniture Break", EvtFurnitureBreakEvent.class, NexoFurnitureBreakEvent.class, "break of (custom|Nexo) furniture [%string%]");
-        EventValues.registerEventValue(NexoFurnitureBreakEvent.class, Player.class, new Converter<NexoFurnitureBreakEvent, Player>() {
-            @Override
-            public Player convert(NexoFurnitureBreakEvent arg) {
-                return arg.getPlayer();
-            }
-        }, 0);
-        EventValues.registerEventValue(NexoFurnitureBreakEvent.class, Location.class, new Converter<NexoFurnitureBreakEvent, Location>() {
-            @Override
-            public Location convert(NexoFurnitureBreakEvent event) {
-                return event.getBaseEntity().getLocation();
-            }
-        }, 0);
+    @SuppressWarnings("unchecked")
+    private static void register() {
+        SyntaxRegistry syntaxRegistry = SkriptNexo.getAddonInstance().syntaxRegistry();
+        syntaxRegistry.register(BukkitSyntaxInfos.Event.KEY,
+            BukkitSyntaxInfos.Event.builder(EvtFurnitureBreakEvent.class, "Furniture Break")
+                .addEvent(NexoFurnitureBreakEvent.class)
+                .addPatterns("break of (custom|Nexo) furniture [%string%]")
+                .supplier(EvtFurnitureBreakEvent::new)
+                .build());
+        EventValueRegistry evr = SkriptNexo.getAddonInstance().registry(EventValueRegistry.class);
+        evr.register(EventValue.simple(NexoFurnitureBreakEvent.class, Player.class, NexoFurnitureBreakEvent::getPlayer));
+        evr.register(EventValue.simple(NexoFurnitureBreakEvent.class, Location.class, e -> e.getBaseEntity().getLocation()));
     }
+
+    static { register(); }
 
     @Override
     public boolean init(Literal<?>[] args, int matchedPattern, SkriptParser.ParseResult parseResult) {

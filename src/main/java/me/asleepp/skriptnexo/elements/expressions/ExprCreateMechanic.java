@@ -1,6 +1,5 @@
 package me.asleepp.skriptnexo.elements.expressions;
 
-import ch.njol.skript.Skript;
 import ch.njol.skript.classes.Changer;
 import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
@@ -13,10 +12,12 @@ import ch.njol.util.Kleenean;
 import com.nexomc.nexo.mechanics.Mechanic;
 import com.nexomc.nexo.mechanics.MechanicFactory;
 import com.nexomc.nexo.mechanics.MechanicsManager;
+import me.asleepp.skriptnexo.SkriptNexo;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.Event;
-import ch.njol.skript.lang.ExpressionType;
+import org.skriptlang.skript.registration.SyntaxInfo;
+import org.skriptlang.skript.registration.SyntaxRegistry;
 
 import java.io.StringReader;
 
@@ -27,7 +28,13 @@ import java.io.StringReader;
 public class ExprCreateMechanic extends SimpleExpression<Mechanic> {
 
     static {
-        Skript.registerExpression(ExprCreateMechanic.class, Mechanic.class, ExpressionType.SIMPLE, "create mechanic with id %string% and configuration %string%");
+        SyntaxRegistry registry = SkriptNexo.getAddonInstance().syntaxRegistry();
+        registry.register(SyntaxRegistry.EXPRESSION,
+            SyntaxInfo.Expression.builder(ExprCreateMechanic.class, Mechanic.class)
+                .priority(SyntaxInfo.SIMPLE)
+                .addPatterns("create mechanic with id %string% and configuration %string%")
+                .supplier(ExprCreateMechanic::new)
+                .build());
     }
 
     private Expression<String> mechanicIdExpr;

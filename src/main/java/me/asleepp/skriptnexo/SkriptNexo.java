@@ -10,7 +10,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import ch.njol.skript.Skript;
-import ch.njol.skript.SkriptAddon;
+import org.skriptlang.skript.addon.SkriptAddon;
 
 import javax.annotation.Nullable;
 
@@ -35,6 +35,7 @@ public class SkriptNexo extends JavaPlugin {
     }
 
     @Override
+    @SuppressWarnings("removal")
     public void onEnable() {
         long start = System.currentTimeMillis();
         final PluginManager manager = this.getServer().getPluginManager();
@@ -43,7 +44,7 @@ public class SkriptNexo extends JavaPlugin {
             getLogger().severe("Could not find Skript! Disabling...");
             manager.disablePlugin(this);
             return;
-        } else if (Skript.getVersion().compareTo(new Version(2, 7, 0)) < 0) {
+        } else if (Skript.getVersion().compareTo(new Version(2, 15, 0)) < 0) {
             getLogger().warning("You are running an unsupported version of Skript. Disabling...");
             manager.disablePlugin(this);
             return;
@@ -67,10 +68,11 @@ public class SkriptNexo extends JavaPlugin {
 
 
 
-        addon = Skript.registerAddon(this);
-        addon.setLanguageFileDirectory("lang");
+        ch.njol.skript.SkriptAddon legacyAddon = Skript.registerAddon(this);
+        addon = legacyAddon;
+        legacyAddon.setLanguageFileDirectory("lang");
         try {
-            addon.loadClasses("me.asleepp.skriptnexo", "elements");
+            legacyAddon.loadClasses("me.asleepp.skriptnexo", "elements");
         } catch (IOException error) {
             error.printStackTrace();
             manager.disablePlugin(this);

@@ -6,15 +6,16 @@ import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.RequiredPlugins;
 import ch.njol.skript.doc.Since;
 import com.nexomc.nexo.api.NexoItems;
-import ch.njol.skript.Skript;
 import ch.njol.skript.aliases.ItemType;
 import ch.njol.skript.lang.Expression;
-import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
+import me.asleepp.skriptnexo.SkriptNexo;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
+import org.skriptlang.skript.registration.SyntaxInfo;
+import org.skriptlang.skript.registration.SyntaxRegistry;
 
 
 import javax.annotation.Nullable;
@@ -28,7 +29,13 @@ public class ExprGetCustomItem extends SimpleExpression<ItemType> {
     private Expression<String> id;
 
     static {
-        Skript.registerExpression(ExprGetCustomItem.class, ItemType.class, ExpressionType.SIMPLE, "(custom|nexo) item %string%");
+        SyntaxRegistry registry = SkriptNexo.getAddonInstance().syntaxRegistry();
+        registry.register(SyntaxRegistry.EXPRESSION,
+            SyntaxInfo.Expression.builder(ExprGetCustomItem.class, ItemType.class)
+                .priority(SyntaxInfo.SIMPLE)
+                .addPatterns("(custom|nexo) item %string%")
+                .supplier(ExprGetCustomItem::new)
+                .build());
     }
 
     @Override

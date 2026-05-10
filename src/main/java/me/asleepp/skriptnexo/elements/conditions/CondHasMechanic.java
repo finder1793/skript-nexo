@@ -1,14 +1,16 @@
 package me.asleepp.skriptnexo.elements.conditions;
 
-import ch.njol.skript.Skript;
 import ch.njol.skript.aliases.ItemType;
 import ch.njol.skript.lang.Condition;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
 import com.nexomc.nexo.api.NexoItems;
+import me.asleepp.skriptnexo.SkriptNexo;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
+import org.skriptlang.skript.registration.SyntaxInfo;
+import org.skriptlang.skript.registration.SyntaxRegistry;
 
 import javax.annotation.Nullable;
 
@@ -17,9 +19,14 @@ public class CondHasMechanic extends Condition {
     private Expression<String> mechanicIdExpr;
 
     static {
-        Skript.registerCondition(CondHasMechanic.class,
-            "%itemtype% has mechanic %string%",
-            "%itemtype% (doesn't|does not) have mechanic %string%");
+        SyntaxRegistry registry = SkriptNexo.getAddonInstance().syntaxRegistry();
+        registry.register(SyntaxRegistry.CONDITION,
+            SyntaxInfo.builder(CondHasMechanic.class)
+                .addPatterns(
+                    "%itemtype% has mechanic %string%",
+                    "%itemtype% (doesn't|does not) have mechanic %string%")
+                .supplier(CondHasMechanic::new)
+                .build());
     }
 
     @Override

@@ -1,6 +1,5 @@
 package me.asleepp.skriptnexo.elements.events;
 
-import ch.njol.skript.Skript;
 import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
@@ -8,10 +7,12 @@ import ch.njol.skript.doc.Since;
 import ch.njol.skript.lang.Literal;
 import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser;
-import ch.njol.skript.registrations.EventValues;
-import org.skriptlang.skript.lang.converter.Converter;
+import org.skriptlang.skript.bukkit.lang.eventvalue.EventValue;
+import org.skriptlang.skript.bukkit.lang.eventvalue.EventValueRegistry;
+import org.skriptlang.skript.bukkit.registration.BukkitSyntaxInfos;
+import org.skriptlang.skript.registration.SyntaxRegistry;
 import com.nexomc.nexo.api.events.furniture.NexoFurnitureDamageEvent;
-import com.nexomc.nexo.api.events.furniture.NexoFurnitureInteractEvent;
+import me.asleepp.skriptnexo.SkriptNexo;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
@@ -25,6 +26,19 @@ public class EvtFurnitureDamageEvent extends SkriptEvent {
     private Literal<String> furnitureID;
     private static boolean skriptReflectPresent = false;
 
+    @SuppressWarnings("unchecked")
+    private static void register(String name, String pattern) {
+        SyntaxRegistry syntaxRegistry = SkriptNexo.getAddonInstance().syntaxRegistry();
+        syntaxRegistry.register(BukkitSyntaxInfos.Event.KEY,
+            BukkitSyntaxInfos.Event.builder(EvtFurnitureDamageEvent.class, name)
+                .addEvent(NexoFurnitureDamageEvent.class)
+                .addPatterns(pattern)
+                .supplier(EvtFurnitureDamageEvent::new)
+                .build());
+        EventValueRegistry evr = SkriptNexo.getAddonInstance().registry(EventValueRegistry.class);
+        evr.register(EventValue.simple(NexoFurnitureDamageEvent.class, Player.class, NexoFurnitureDamageEvent::getPlayer));
+    }
+
     static {
         try {
             Class.forName("com.btk5h.skriptmirror.SkriptMirror");
@@ -34,17 +48,9 @@ public class EvtFurnitureDamageEvent extends SkriptEvent {
         String eventName = "NexoFurnitureDamage_Internal";
         String eventPattern = "(hurt|damage) of (custom|Nexo) furniture [%string%]";
         if (!skriptReflectPresent) {
-            Skript.registerEvent(eventName, EvtFurnitureDamageEvent.class, NexoFurnitureDamageEvent.class, eventPattern);
-            EventValues.registerEventValue(NexoFurnitureDamageEvent.class, Player.class, new Converter<NexoFurnitureDamageEvent, Player>() {
-                @Override
-                public Player convert(NexoFurnitureDamageEvent arg) {
-                    return arg.getPlayer();
-                }
-            }, 0);
+            register(eventName, eventPattern);
         } else {
-            // Alternate registration for skript-reflect
-            Skript.registerEvent(eventName + "_Reflect", EvtFurnitureDamageEvent.class, NexoFurnitureDamageEvent.class, eventPattern);
-            // You can add more workaround logic here if needed
+            register(eventName + "_Reflect", eventPattern);
         }
     }
     @Override

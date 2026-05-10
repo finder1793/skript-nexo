@@ -1,6 +1,5 @@
 package me.asleepp.skriptnexo.elements.events;
 
-import ch.njol.skript.Skript;
 import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
@@ -8,11 +7,11 @@ import ch.njol.skript.doc.Since;
 import ch.njol.skript.lang.Literal;
 import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser;
-import ch.njol.skript.registrations.EventValues;
-import org.skriptlang.skript.lang.converter.Converter;
-import com.nexomc.nexo.api.events.custom_block.noteblock.NexoNoteBlockInteractEvent;
+import org.skriptlang.skript.bukkit.lang.eventvalue.EventValue;
+import org.skriptlang.skript.bukkit.lang.eventvalue.EventValueRegistry;
+import org.skriptlang.skript.bukkit.registration.BukkitSyntaxInfos;
+import org.skriptlang.skript.registration.SyntaxRegistry;
 import com.nexomc.nexo.api.events.custom_block.stringblock.NexoStringBlockBreakEvent;
-import com.nexomc.nexo.api.events.custom_block.stringblock.NexoStringBlockInteractEvent;
 import com.nexomc.nexo.utils.drops.Drop;
 import me.asleepp.skriptnexo.SkriptNexo;
 import org.bukkit.Bukkit;
@@ -33,27 +32,22 @@ public class EvtStringBlockBreakEvent extends SkriptEvent {
     private Literal<String> stringBlockID;
     private final Map<Player, Long> lastEventTimestamps = new HashMap<>();
 
-    static {
-        Skript.registerEvent("String Block Break", EvtStringBlockBreakEvent.class, NexoStringBlockBreakEvent.class, "break of (custom|Nexo) string block [%string%]");
-        EventValues.registerEventValue(NexoStringBlockBreakEvent.class, Player.class, new Converter<NexoStringBlockBreakEvent, Player>() {
-            @Override
-            public Player convert(NexoStringBlockBreakEvent arg) {
-                return arg.getPlayer();
-            }
-        }, 0);
-        EventValues.registerEventValue(NexoStringBlockBreakEvent.class, Block.class, new Converter<NexoStringBlockBreakEvent, Block>() {
-            @Override
-            public Block convert(NexoStringBlockBreakEvent arg) {
-                return arg.getBlock();
-            }
-        }, 0);
-        EventValues.registerEventValue(NexoStringBlockBreakEvent.class, Drop.class, new Converter<NexoStringBlockBreakEvent, Drop>() {
-            @Override
-            public Drop convert(NexoStringBlockBreakEvent arg) {
-                return arg.getDrop();
-            }
-        }, 0);
+    @SuppressWarnings("unchecked")
+    private static void register() {
+        SyntaxRegistry syntaxRegistry = SkriptNexo.getAddonInstance().syntaxRegistry();
+        syntaxRegistry.register(BukkitSyntaxInfos.Event.KEY,
+            BukkitSyntaxInfos.Event.builder(EvtStringBlockBreakEvent.class, "String Block Break")
+                .addEvent(NexoStringBlockBreakEvent.class)
+                .addPatterns("break of (custom|Nexo) string block [%string%]")
+                .supplier(EvtStringBlockBreakEvent::new)
+                .build());
+        EventValueRegistry evr = SkriptNexo.getAddonInstance().registry(EventValueRegistry.class);
+        evr.register(EventValue.simple(NexoStringBlockBreakEvent.class, Player.class, NexoStringBlockBreakEvent::getPlayer));
+        evr.register(EventValue.simple(NexoStringBlockBreakEvent.class, Block.class, NexoStringBlockBreakEvent::getBlock));
+        evr.register(EventValue.simple(NexoStringBlockBreakEvent.class, Drop.class, NexoStringBlockBreakEvent::getDrop));
     }
+
+    static { register(); }
 
     @Override
     public boolean init(Literal<?>[] args, int matchedPattern, SkriptParser.ParseResult parseResult) {

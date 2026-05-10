@@ -1,6 +1,5 @@
 package me.asleepp.skriptnexo.elements.events;
 
-import ch.njol.skript.Skript;
 import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
@@ -8,13 +7,15 @@ import ch.njol.skript.doc.Since;
 import ch.njol.skript.lang.Literal;
 import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser;
-import ch.njol.skript.registrations.EventValues;
-import ch.njol.skript.util.Getter;
+import org.skriptlang.skript.bukkit.lang.eventvalue.EventValue;
+import org.skriptlang.skript.bukkit.lang.eventvalue.EventValueRegistry;
+import org.skriptlang.skript.bukkit.registration.BukkitSyntaxInfos;
+import org.skriptlang.skript.registration.SyntaxRegistry;
 import com.nexomc.nexo.api.events.custom_block.stringblock.NexoStringBlockDamageEvent;
+import me.asleepp.skriptnexo.SkriptNexo;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
-import org.skriptlang.skript.lang.converter.Converter;
 
 import javax.annotation.Nullable;
 @Name("On Custom String Block Damage")
@@ -25,21 +26,21 @@ public class EvtStringBlockDamageEvent extends SkriptEvent {
 
     private Literal<String> stringBlockID;
 
-    static {
-        Skript.registerEvent("String Block Damage", EvtStringBlockDamageEvent.class, NexoStringBlockDamageEvent.class, "damage of (custom|Nexo) string block [%string%]");
-        EventValues.registerEventValue(NexoStringBlockDamageEvent.class, Player.class, new Converter<NexoStringBlockDamageEvent, Player>() {
-            @Override
-            public Player convert(NexoStringBlockDamageEvent arg) {
-                return arg.getPlayer();
-            }
-        }, 0);
-        EventValues.registerEventValue(NexoStringBlockDamageEvent.class, Block.class, new Converter<NexoStringBlockDamageEvent, Block>() {
-            @Override
-            public Block convert(NexoStringBlockDamageEvent arg) {
-                return arg.getBlock();
-            }
-        }, 0);
+    @SuppressWarnings("unchecked")
+    private static void register() {
+        SyntaxRegistry syntaxRegistry = SkriptNexo.getAddonInstance().syntaxRegistry();
+        syntaxRegistry.register(BukkitSyntaxInfos.Event.KEY,
+            BukkitSyntaxInfos.Event.builder(EvtStringBlockDamageEvent.class, "String Block Damage")
+                .addEvent(NexoStringBlockDamageEvent.class)
+                .addPatterns("damage of (custom|Nexo) string block [%string%]")
+                .supplier(EvtStringBlockDamageEvent::new)
+                .build());
+        EventValueRegistry evr = SkriptNexo.getAddonInstance().registry(EventValueRegistry.class);
+        evr.register(EventValue.simple(NexoStringBlockDamageEvent.class, Player.class, NexoStringBlockDamageEvent::getPlayer));
+        evr.register(EventValue.simple(NexoStringBlockDamageEvent.class, Block.class, NexoStringBlockDamageEvent::getBlock));
     }
+
+    static { register(); }
     @Override
     public boolean init(Literal<?>[] args, int matchedPattern, SkriptParser.ParseResult parseResult) {
         stringBlockID = (Literal<String>) args[0];

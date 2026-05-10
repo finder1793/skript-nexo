@@ -1,11 +1,13 @@
 package me.asleepp.skriptnexo.elements.expressions;
 
-import ch.njol.skript.Skript;
+import ch.njol.skript.expressions.base.PropertyExpression;
 import ch.njol.skript.lang.Expression;
-import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
+import me.asleepp.skriptnexo.SkriptNexo;
+import org.skriptlang.skript.registration.SyntaxInfo;
+import org.skriptlang.skript.registration.SyntaxRegistry;
 import org.bukkit.event.Event;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Description;
@@ -25,9 +27,15 @@ public class ExprMechanicProperty extends SimpleExpression<Object> {
     private Expression<String> mechanicId;
 
     static {
-        Skript.registerExpression(ExprMechanicProperty.class, Object.class, ExpressionType.PROPERTY,
-            "[the] property %string% of [mechanic] %string%",
-            "[mechanic] %string%'s property %string%");
+        SyntaxRegistry registry = SkriptNexo.getAddonInstance().syntaxRegistry();
+        registry.register(SyntaxRegistry.EXPRESSION,
+            SyntaxInfo.Expression.builder(ExprMechanicProperty.class, Object.class)
+                .priority(PropertyExpression.DEFAULT_PRIORITY)
+                .addPatterns(
+                    "[the] property %string% of [mechanic] %string%",
+                    "[mechanic] %string%'s property %string%")
+                .supplier(ExprMechanicProperty::new)
+                .build());
     }
 
     @Override

@@ -1,9 +1,10 @@
 package me.asleepp.skriptnexo.elements.effects;
 
-import ch.njol.skript.Skript;
 import ch.njol.skript.lang.Effect;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
+import org.skriptlang.skript.registration.SyntaxInfo;
+import org.skriptlang.skript.registration.SyntaxRegistry;
 import ch.njol.util.Kleenean;
 import com.nexomc.nexo.mechanics.MechanicFactory;
 import com.nexomc.nexo.mechanics.MechanicsManager;
@@ -33,8 +34,12 @@ public class EffCreateCustomMechanic extends Effect {
     private Expression<String> mechanicId;
     
     static {
-        Skript.registerEffect(EffCreateCustomMechanic.class, 
-            "create [new] [nexo] mechanic [with id] %string%");
+        SyntaxRegistry registry = SkriptNexo.getAddonInstance().syntaxRegistry();
+        registry.register(SyntaxRegistry.EFFECT,
+            SyntaxInfo.builder(EffCreateCustomMechanic.class)
+                .addPatterns("create [new] [nexo] mechanic [with id] %string%")
+                .supplier(EffCreateCustomMechanic::new)
+                .build());
     }
 
     @Override

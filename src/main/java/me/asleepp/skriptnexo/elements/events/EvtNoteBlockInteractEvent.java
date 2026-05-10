@@ -1,6 +1,5 @@
 package me.asleepp.skriptnexo.elements.events;
 
-import ch.njol.skript.Skript;
 import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
@@ -8,8 +7,10 @@ import ch.njol.skript.doc.Since;
 import ch.njol.skript.lang.Literal;
 import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser;
-import ch.njol.skript.registrations.EventValues;
-import org.skriptlang.skript.lang.converter.Converter;
+import org.skriptlang.skript.bukkit.lang.eventvalue.EventValue;
+import org.skriptlang.skript.bukkit.lang.eventvalue.EventValueRegistry;
+import org.skriptlang.skript.bukkit.registration.BukkitSyntaxInfos;
+import org.skriptlang.skript.registration.SyntaxRegistry;
 import com.nexomc.nexo.api.events.custom_block.noteblock.NexoNoteBlockInteractEvent;
 import me.asleepp.skriptnexo.SkriptNexo;
 import org.bukkit.Bukkit;
@@ -30,21 +31,21 @@ public class EvtNoteBlockInteractEvent extends SkriptEvent {
     private Literal<String> noteBlockID;
     private final Map<Player, Long> lastEventTimestamps = new HashMap<>();
 
-    static {
-        Skript.registerEvent("Custom Note Block Interact", EvtNoteBlockInteractEvent.class, NexoNoteBlockInteractEvent.class, "interact with (custom|Nexo) (music|note) block [%string%]");
-        EventValues.registerEventValue(NexoNoteBlockInteractEvent.class, Player.class, new Converter<NexoNoteBlockInteractEvent, Player>() {
-            @Override
-            public Player convert(NexoNoteBlockInteractEvent arg) {
-                return arg.getPlayer();
-            }
-        }, 0);
-        EventValues.registerEventValue(NexoNoteBlockInteractEvent.class, Block.class, new Converter<NexoNoteBlockInteractEvent, Block>() {
-            @Override
-            public Block convert(NexoNoteBlockInteractEvent arg) {
-                return arg.getBlock();
-            }
-        }, 0);
+    @SuppressWarnings("unchecked")
+    private static void register() {
+        SyntaxRegistry syntaxRegistry = SkriptNexo.getAddonInstance().syntaxRegistry();
+        syntaxRegistry.register(BukkitSyntaxInfos.Event.KEY,
+            BukkitSyntaxInfos.Event.builder(EvtNoteBlockInteractEvent.class, "Custom Note Block Interact")
+                .addEvent(NexoNoteBlockInteractEvent.class)
+                .addPatterns("interact with (custom|Nexo) (music|note) block [%string%]")
+                .supplier(EvtNoteBlockInteractEvent::new)
+                .build());
+        EventValueRegistry evr = SkriptNexo.getAddonInstance().registry(EventValueRegistry.class);
+        evr.register(EventValue.simple(NexoNoteBlockInteractEvent.class, Player.class, NexoNoteBlockInteractEvent::getPlayer));
+        evr.register(EventValue.simple(NexoNoteBlockInteractEvent.class, Block.class, NexoNoteBlockInteractEvent::getBlock));
     }
+
+    static { register(); }
 
     @Override
     public boolean init(Literal<?>[] args, int matchedPattern, SkriptParser.ParseResult parseResult) {

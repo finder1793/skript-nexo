@@ -1,6 +1,5 @@
 package me.asleepp.skriptnexo.elements.conditions;
 
-import ch.njol.skript.Skript;
 import ch.njol.skript.aliases.ItemType;
 import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
@@ -12,8 +11,11 @@ import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
 import com.nexomc.nexo.api.NexoItems;
+import me.asleepp.skriptnexo.SkriptNexo;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
+import org.skriptlang.skript.registration.SyntaxInfo;
+import org.skriptlang.skript.registration.SyntaxRegistry;
 
 import javax.annotation.Nullable;
 
@@ -27,7 +29,12 @@ public class CondIsCustomItem extends Condition {
     private Expression<ItemType> item;
 
     static {
-        Skript.registerCondition(CondIsCustomItem.class, "%itemtypes% (is [a[n]]|are) (custom|nexo) item[s]");
+        SyntaxRegistry registry = SkriptNexo.getAddonInstance().syntaxRegistry();
+        registry.register(SyntaxRegistry.CONDITION,
+            SyntaxInfo.builder(CondIsCustomItem.class)
+                .addPatterns("%itemtypes% (is [a[n]]|are) (custom|nexo) item[s]")
+                .supplier(CondIsCustomItem::new)
+                .build());
     }
 
     @Override

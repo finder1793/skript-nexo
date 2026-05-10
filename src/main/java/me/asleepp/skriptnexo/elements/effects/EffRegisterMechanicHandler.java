@@ -1,10 +1,12 @@
 package me.asleepp.skriptnexo.elements.effects;
 
-import ch.njol.skript.Skript;
 import ch.njol.skript.lang.Effect;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.TriggerItem;
+import me.asleepp.skriptnexo.SkriptNexo;
+import org.skriptlang.skript.registration.SyntaxInfo;
+import org.skriptlang.skript.registration.SyntaxRegistry;
 import ch.njol.util.Kleenean;
 import me.asleepp.skriptnexo.mechanics.MechanicHandler;
 import org.bukkit.event.Event;
@@ -27,8 +29,12 @@ public class EffRegisterMechanicHandler extends Effect {
     private TriggerItem trigger;
 
     static {
-        Skript.registerEffect(EffRegisterMechanicHandler.class, 
-            "register handler for [mechanic] %string% [event] %string%");
+        SyntaxRegistry registry = SkriptNexo.getAddonInstance().syntaxRegistry();
+        registry.register(SyntaxRegistry.EFFECT,
+            SyntaxInfo.builder(EffRegisterMechanicHandler.class)
+                .addPatterns("register handler for [mechanic] %string% [event] %string%")
+                .supplier(EffRegisterMechanicHandler::new)
+                .build());
     }
 
     @Override

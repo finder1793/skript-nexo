@@ -10,6 +10,9 @@ import ch.njol.skript.lang.Condition;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
+import me.asleepp.skriptnexo.SkriptNexo;
+import org.skriptlang.skript.registration.SyntaxInfo;
+import org.skriptlang.skript.registration.SyntaxRegistry;
 import com.nexomc.nexo.api.events.custom_block.noteblock.NexoNoteBlockInteractEvent;
 import com.nexomc.nexo.api.events.custom_block.stringblock.NexoStringBlockInteractEvent;
 import com.nexomc.nexo.api.events.furniture.NexoFurnitureInteractEvent;
@@ -28,7 +31,12 @@ public class CondIsHand extends Condition {
     private boolean isLeft;
 
     static {
-        Skript.registerCondition(CondIsHand.class, "[custom|nexo] (interaction) (was [with]) [the[ir] | [the player's]] (:right|:left) (arm|hand)");
+        SyntaxRegistry registry = SkriptNexo.getAddonInstance().syntaxRegistry();
+        registry.register(SyntaxRegistry.CONDITION,
+            SyntaxInfo.builder(CondIsHand.class)
+                .addPatterns("[custom|nexo] (interaction) (was [with]) [the[ir] | [the player's]] (:right|:left) (arm|hand)")
+                .supplier(CondIsHand::new)
+                .build());
     }
 
     @Override

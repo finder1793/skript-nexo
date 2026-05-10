@@ -1,23 +1,24 @@
 package me.asleepp.skriptnexo.elements.expressions;
 
-import ch.njol.skript.Skript;
 import ch.njol.skript.classes.Changer;
 import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
-import ch.njol.skript.expressions.base.SimplePropertyExpression;
+import ch.njol.skript.expressions.base.PropertyExpression;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
 import com.nexomc.nexo.api.NexoItems;
+import me.asleepp.skriptnexo.SkriptNexo;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.Event;
 import org.bukkit.metadata.MetadataValue;
-import ch.njol.skript.lang.ExpressionType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.entity.ThrowableProjectile;
+import org.skriptlang.skript.registration.SyntaxInfo;
+import org.skriptlang.skript.registration.SyntaxRegistry;
 
 @Name("Get Custom Item ID from Projectile")
 @Description("Gets the custom item ID from a projectile.")
@@ -26,9 +27,15 @@ import org.bukkit.entity.ThrowableProjectile;
 public class ExprGetCustomItemIDFromProjectile extends SimpleExpression<String> {
 
     static {
-        Skript.registerExpression(ExprGetCustomItemIDFromProjectile.class, String.class, ExpressionType.PROPERTY, 
-            "(custom|nexo) item ID of %projectile%",
-            "%projectile%'s (custom|nexo) item ID");
+        SyntaxRegistry registry = SkriptNexo.getAddonInstance().syntaxRegistry();
+        registry.register(SyntaxRegistry.EXPRESSION,
+            SyntaxInfo.Expression.builder(ExprGetCustomItemIDFromProjectile.class, String.class)
+                .priority(PropertyExpression.DEFAULT_PRIORITY)
+                .addPatterns(
+                    "(custom|nexo) item ID of %projectile%",
+                    "%projectile%'s (custom|nexo) item ID")
+                .supplier(ExprGetCustomItemIDFromProjectile::new)
+                .build());
     }
 
     private Expression<Projectile> projectileExpr;

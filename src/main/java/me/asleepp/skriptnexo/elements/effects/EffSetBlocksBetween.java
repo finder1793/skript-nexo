@@ -1,12 +1,14 @@
 package me.asleepp.skriptnexo.elements.effects;
 
-import ch.njol.skript.Skript;
 import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.lang.Effect;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
+import me.asleepp.skriptnexo.SkriptNexo;
+import org.skriptlang.skript.registration.SyntaxInfo;
+import org.skriptlang.skript.registration.SyntaxRegistry;
 import ch.njol.util.Kleenean;
 import com.nexomc.nexo.api.NexoBlocks;
 import org.bukkit.Location;
@@ -22,7 +24,12 @@ public class EffSetBlocksBetween extends Effect {
     private Expression<String> BlockId;
 
     static {
-        Skript.registerEffect(EffSetBlocksBetween.class, "(set|place) [all] blocks within %location% and %location% to (custom|nexo) block %string%");
+        SyntaxRegistry registry = SkriptNexo.getAddonInstance().syntaxRegistry();
+        registry.register(SyntaxRegistry.EFFECT,
+            SyntaxInfo.builder(EffSetBlocksBetween.class)
+                .addPatterns("(set|place) [all] blocks within %location% and %location% to (custom|nexo) block %string%")
+                .supplier(EffSetBlocksBetween::new)
+                .build());
     }
 
     @Override

@@ -1,11 +1,12 @@
 package me.asleepp.skriptnexo.elements.events;
 
-import ch.njol.skript.Skript;
 import ch.njol.skript.lang.Literal;
 import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser;
-import ch.njol.skript.registrations.EventValues;
-import org.skriptlang.skript.lang.converter.Converter;
+import org.skriptlang.skript.bukkit.lang.eventvalue.EventValue;
+import org.skriptlang.skript.bukkit.lang.eventvalue.EventValueRegistry;
+import org.skriptlang.skript.bukkit.registration.BukkitSyntaxInfos;
+import org.skriptlang.skript.registration.SyntaxRegistry;
 import me.asleepp.skriptnexo.mechanics.events.SkriptMechanicInteractEvent;
 import me.asleepp.skriptnexo.SkriptNexo;
 import org.bukkit.entity.Player;
@@ -23,39 +24,23 @@ public class EvtMechanicInteractEvent extends SkriptEvent {
     private Literal<String> mechanicId;
     private final Map<Player, Long> lastEventTimestamps = new HashMap<>();
 
-    static {
-        Skript.registerEvent("Mechanic Interact", EvtMechanicInteractEvent.class, SkriptMechanicInteractEvent.class, 
-            "interact with [mechanic] %string%");
-
-        // Register event values
-        EventValues.registerEventValue(SkriptMechanicInteractEvent.class, Player.class, new Converter<SkriptMechanicInteractEvent, Player>() {
-            @Override
-            public Player convert(SkriptMechanicInteractEvent event) {
-                return event.getPlayer();
-            }
-        }, 0);
-
-        EventValues.registerEventValue(SkriptMechanicInteractEvent.class, ItemStack.class, new Converter<SkriptMechanicInteractEvent, ItemStack>() {
-            @Override
-            public ItemStack convert(SkriptMechanicInteractEvent event) {
-                return event.getItem();
-            }
-        }, 0);
-
-        EventValues.registerEventValue(SkriptMechanicInteractEvent.class, Location.class, new Converter<SkriptMechanicInteractEvent, Location>() {
-            @Override
-            public Location convert(SkriptMechanicInteractEvent event) {
-                return event.getPlayer().getLocation();
-            }
-        }, 0);
-
-        EventValues.registerEventValue(SkriptMechanicInteractEvent.class, Action.class, new Converter<SkriptMechanicInteractEvent, Action>() {
-            @Override
-            public Action convert(SkriptMechanicInteractEvent event) {
-                return event.getAction();
-            }
-        }, 0);
+    @SuppressWarnings("unchecked")
+    private static void register() {
+        SyntaxRegistry syntaxRegistry = SkriptNexo.getAddonInstance().syntaxRegistry();
+        syntaxRegistry.register(BukkitSyntaxInfos.Event.KEY,
+            BukkitSyntaxInfos.Event.builder(EvtMechanicInteractEvent.class, "Mechanic Interact")
+                .addEvent(SkriptMechanicInteractEvent.class)
+                .addPatterns("interact with [mechanic] %string%")
+                .supplier(EvtMechanicInteractEvent::new)
+                .build());
+        EventValueRegistry evr = SkriptNexo.getAddonInstance().registry(EventValueRegistry.class);
+        evr.register(EventValue.simple(SkriptMechanicInteractEvent.class, Player.class, SkriptMechanicInteractEvent::getPlayer));
+        evr.register(EventValue.simple(SkriptMechanicInteractEvent.class, ItemStack.class, SkriptMechanicInteractEvent::getItem));
+        evr.register(EventValue.simple(SkriptMechanicInteractEvent.class, Location.class, e -> e.getPlayer().getLocation()));
+        evr.register(EventValue.simple(SkriptMechanicInteractEvent.class, Action.class, SkriptMechanicInteractEvent::getAction));
     }
+
+    static { register(); }
 
     @Override
     public boolean init(Literal<?>[] args, int matchedPattern, SkriptParser.ParseResult parseResult) {

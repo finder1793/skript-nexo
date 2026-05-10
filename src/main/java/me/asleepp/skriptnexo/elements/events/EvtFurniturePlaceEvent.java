@@ -1,6 +1,5 @@
 package me.asleepp.skriptnexo.elements.events;
 
-import ch.njol.skript.Skript;
 import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
@@ -8,9 +7,12 @@ import ch.njol.skript.doc.Since;
 import ch.njol.skript.lang.Literal;
 import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser;
-import ch.njol.skript.registrations.EventValues;
-import org.skriptlang.skript.lang.converter.Converter;
+import org.skriptlang.skript.bukkit.lang.eventvalue.EventValue;
+import org.skriptlang.skript.bukkit.lang.eventvalue.EventValueRegistry;
+import org.skriptlang.skript.bukkit.registration.BukkitSyntaxInfos;
+import org.skriptlang.skript.registration.SyntaxRegistry;
 import com.nexomc.nexo.api.events.furniture.NexoFurniturePlaceEvent;
+import me.asleepp.skriptnexo.SkriptNexo;
 import org.bukkit.entity.Player;
 import org.bukkit.Location;
 import org.bukkit.event.Event;
@@ -24,27 +26,22 @@ import javax.annotation.Nullable;
 public class EvtFurniturePlaceEvent extends SkriptEvent {
     private Literal<String> furnitureID;
 
-    static {
-        Skript.registerEvent("Furniture Place", EvtFurniturePlaceEvent.class, NexoFurniturePlaceEvent.class, "place of (custom|Nexo) furniture [%string%]");
-        EventValues.registerEventValue(NexoFurniturePlaceEvent.class, Player.class, new Converter<NexoFurniturePlaceEvent, Player>() {
-            @Override
-            public Player convert(NexoFurniturePlaceEvent arg) {
-                return arg.getPlayer();
-            }
-        }, 0);
-        EventValues.registerEventValue(NexoFurniturePlaceEvent.class, ItemStack.class, new Converter<NexoFurniturePlaceEvent, ItemStack>() {
-            @Override
-            public ItemStack convert(NexoFurniturePlaceEvent arg) {
-                return arg.getItemInHand();
-            }
-        }, 0);
-        EventValues.registerEventValue(NexoFurniturePlaceEvent.class, Location.class, new Converter<NexoFurniturePlaceEvent, Location>() {
-            @Override
-            public Location convert(NexoFurniturePlaceEvent event) {
-                return event.getBaseEntity().getLocation();
-            }
-        }, 0);
+    @SuppressWarnings("unchecked")
+    private static void register() {
+        SyntaxRegistry syntaxRegistry = SkriptNexo.getAddonInstance().syntaxRegistry();
+        syntaxRegistry.register(BukkitSyntaxInfos.Event.KEY,
+            BukkitSyntaxInfos.Event.builder(EvtFurniturePlaceEvent.class, "Furniture Place")
+                .addEvent(NexoFurniturePlaceEvent.class)
+                .addPatterns("place of (custom|Nexo) furniture [%string%]")
+                .supplier(EvtFurniturePlaceEvent::new)
+                .build());
+        EventValueRegistry evr = SkriptNexo.getAddonInstance().registry(EventValueRegistry.class);
+        evr.register(EventValue.simple(NexoFurniturePlaceEvent.class, Player.class, NexoFurniturePlaceEvent::getPlayer));
+        evr.register(EventValue.simple(NexoFurniturePlaceEvent.class, ItemStack.class, NexoFurniturePlaceEvent::getItemInHand));
+        evr.register(EventValue.simple(NexoFurniturePlaceEvent.class, Location.class, e -> e.getBaseEntity().getLocation()));
     }
+
+    static { register(); }
 
     @Override
     public boolean init(Literal<?>[] args, int matchedPattern, SkriptParser.ParseResult parseResult) {
