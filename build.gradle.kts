@@ -31,7 +31,7 @@ dependencies {
     compileOnly(libs.lombok)
     compileOnly(libs.nexo)
     compileOnly(libs.skript)
-    implementation(libs.creative)
+    compileOnly(libs.creative)
     annotationProcessor(libs.lombok)
     implementation(kotlin("stdlib-jdk8"))
 }
@@ -51,7 +51,7 @@ tasks {
 
         configurations = listOf(project.configurations.runtimeClasspath.get())
         minimize()
-        relocate("team.unnamed.creative", "me.asleepp.skriptnexo.shadow.team.unnamed.creative")
+
     }
 
     assemble {
